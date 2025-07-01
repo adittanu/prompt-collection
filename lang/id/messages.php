@@ -1,0 +1,52 @@
+<?php
+
+return [
+    'hero' => [
+        'title' => 'Prompt Kreatif & Hasil',
+        'description' => 'Jelajahi koleksi prompt terpilih dan hasil menakjubkan mereka. Dari gambar dan video yang memukau hingga panduan dan tutorial yang komprehensif.',
+        'explore_collection' => 'Jelajahi Koleksi',
+        'popular_prompts' => 'Prompt Populer',
+        'total_prompts' => 'Total Prompt',
+        'content_types' => 'Jenis Konten',
+        'quality_results' => 'Hasil Berkualitas',
+    ],
+    'prompts' => [
+        'collection_title' => 'Koleksi Prompt',
+        'search_placeholder' => 'Cari prompt, deskripsi, atau tag...',
+        'all_prompts' => 'Semua Prompt',
+        'images' => 'Gambar',
+        'videos' => 'Video',
+        'text' => 'Teks',
+        'showing' => 'Menampilkan',
+        'of' => 'dari',
+        'prompts' => 'prompt',
+        'prompt_label' => 'Prompt:',
+        'result_label' => 'Hasil:',
+        'copy' => 'Salin',
+        'copied' => 'Tersalin!',
+        'view_full_size' => 'Lihat Ukuran Penuh',
+        'video_placeholder' => 'Konten video akan ditampilkan di sini',
+    ],
+    'about' => [
+        'title' => 'Tentang Adit Tanu',
+        'description_1' => 'Pendiri dan pencipta website koleksi prompt ini. Adit Tanu bersemangat menjelajahi kemungkinan kreatif konten yang dihasilkan AI dan membagikan prompt inovatif dengan komunitas.',
+        'description_2' => 'Koleksi ini menampilkan berbagai jenis prompt dan hasilnya, termasuk seni visual yang memukau, tutorial komprehensif, panduan edukasi, dan skrip kreatif. Setiap prompt dibuat dengan hati-hati untuk mendemonstrasikan potensi kreativitas berbantuan AI.',
+        'visual_content' => 'Konten Visual',
+        'visual_desc' => 'Membuat gambar dan grafik yang memukau',
+        'educational_content' => 'Konten Edukasi',
+        'educational_desc' => 'Panduan dan tutorial komprehensif',
+        'video_content' => 'Konten Video',
+        'video_desc' => 'Animasi dinamis dan grafik bergerak',
+    ],
+    'nav' => [
+        'home' => 'Beranda',
+        'prompts' => 'Prompt',
+        'about' => 'Tentang',
+        'add_prompt' => 'Tambah Prompt',
+        'language' => 'Bahasa',
+    ],
+    'footer' => [
+        'copyright' => 'Hak Cipta 2025 Koleksi Prompt oleh Adit Tanu. Seluruh hak dilindungi.',
+        'tagline' => 'Menampilkan kekuatan prompt kreatif dan konten yang dihasilkan AI',
+    ],
+];

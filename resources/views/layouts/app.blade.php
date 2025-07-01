@@ -85,10 +85,46 @@
                     <span class="ml-2 text-sm text-gray-500">by Adit Tanu</span>
                 </div>
                 <div class="flex items-center space-x-8">
-                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-gray-900 font-medium">Home</a>
+                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.home') }}</a>
                     <a href="{{ route('home') }}#prompts"
-                        class="text-gray-700 hover:text-gray-900 font-medium">Prompts</a>
-                    <a href="{{ route('home') }}#about" class="text-gray-700 hover:text-gray-900 font-medium">About</a>
+                        class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.prompts') }}</a>
+                    <a href="{{ route('home') }}#about" class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.about') }}</a>
+                    
+                    <!-- Language Switcher -->
+                    <div class="relative group">
+                        <button class="flex items-center text-gray-700 hover:text-gray-900 font-medium">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                            </svg>
+                            {{ app()->getLocale() == 'id' ? 'ID' : 'EN' }}
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="py-1">
+                                <a href="{{ route('language.switch', 'id') }}" 
+                                   class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'id' ? 'bg-blue-50 text-blue-700' : '' }}">
+                                    <span class="w-6 h-4 mr-2 bg-red-500 relative">
+                                        <span class="absolute inset-0 bg-white"></span>
+                                        <span class="absolute bottom-0 left-0 w-full h-2 bg-red-500"></span>
+                                    </span>
+                                    Indonesia
+                                </a>
+                                <a href="{{ route('language.switch', 'en') }}" 
+                                   class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'en' ? 'bg-blue-50 text-blue-700' : '' }}">
+                                    <span class="w-6 h-4 mr-2 bg-blue-500 relative">
+                                        <span class="absolute inset-0 bg-blue-500"></span>
+                                        <span class="absolute top-0 left-0 w-full h-1 bg-red-500"></span>
+                                        <span class="absolute top-1 left-0 w-full h-1 bg-white"></span>
+                                        <span class="absolute top-2 left-0 w-full h-1 bg-red-500"></span>
+                                        <span class="absolute top-3 left-0 w-full h-1 bg-white"></span>
+                                    </span>
+                                    English
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -105,49 +141,44 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-3 gap-8">
                 <div>
-                    <h3 class="text-lg font-bold mb-4">About Adit Tanu</h3>
-                    <p class="text-gray-300">Founder and creator of this prompt collection website. Adit Tanu is
-                        passionate about exploring the creative possibilities of AI-generated content and sharing
-                        innovative prompts with the community.</p>
+                    <h3 class="text-lg font-bold mb-4">{{ __('messages.about.title') }}</h3>
+                    <p class="text-gray-300">{{ __('messages.about.description_1') }}</p>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold mb-4">Content Types</h3>
+                    <h3 class="text-lg font-bold mb-4">{{ __('messages.hero.content_types') }}</h3>
                     <div class="space-y-2">
                         <div class="flex items-center">
                             <span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span>
-                            <span>Visual Content - Creating stunning images and graphics</span>
+                            <span>{{ __('messages.about.visual_content') }} - {{ __('messages.about.visual_desc') }}</span>
                         </div>
                         <div class="flex items-center">
                             <span class="w-3 h-3 bg-indigo-500 rounded-full mr-3"></span>
-                            <span>Educational Content - Comprehensive guides and tutorials</span>
+                            <span>{{ __('messages.about.educational_content') }} - {{ __('messages.about.educational_desc') }}</span>
                         </div>
                         <div class="flex items-center">
                             <span class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
-                            <span>Video Content - Dynamic animations and motion graphics</span>
+                            <span>{{ __('messages.about.video_content') }} - {{ __('messages.about.video_desc') }}</span>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold mb-4">Collection</h3>
-                    <p class="text-gray-300">This collection showcases various types of prompts and their results,
-                        including stunning visual art, comprehensive tutorials, educational guides, and creative
-                        scripts. Each prompt is carefully crafted to demonstrate the potential of AI-assisted
-                        creativity.</p>
+                    <h3 class="text-lg font-bold mb-4">{{ __('messages.prompts.collection_title') }}</h3>
+                    <p class="text-gray-300">{{ __('messages.about.description_2') }}</p>
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center">
-                <p>&copy; 2025 Prompt Collection by Adit Tanu. All rights reserved.</p>
-                <p class="text-gray-400 mt-2">Showcasing the power of creative prompts and AI-generated content</p>
+                <p>{{ __('messages.footer.copyright') }}</p>
+                <p class="text-gray-400 mt-2">{{ __('messages.footer.tagline') }}</p>
             </div>
         </div>
-    </footer> <!-- JavaScript for copy functionality -->
+    </footer>    <!-- JavaScript for copy functionality -->
     <script>
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(function() {
                 // Show success message
                 const button = event.target;
                 const originalText = button.textContent;
-                button.textContent = 'Copied!';
+                button.textContent = '{{ __("messages.prompts.copied") }}';
                 button.classList.add('bg-green-500');
 
                 setTimeout(() => {

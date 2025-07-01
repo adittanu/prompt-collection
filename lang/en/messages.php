@@ -1,0 +1,52 @@
+<?php
+
+return [
+    'hero' => [
+        'title' => 'Creative Prompts & Results',
+        'description' => 'Explore a curated collection of prompts and their amazing results. From stunning images and videos to comprehensive guides and tutorials.',
+        'explore_collection' => 'Explore Collection',
+        'popular_prompts' => 'Popular Prompts',
+        'total_prompts' => 'Total Prompts',
+        'content_types' => 'Content Types',
+        'quality_results' => 'Quality Results',
+    ],
+    'prompts' => [
+        'collection_title' => 'Prompt Collection',
+        'search_placeholder' => 'Search prompts, descriptions, or tags...',
+        'all_prompts' => 'All Prompts',
+        'images' => 'Images',
+        'videos' => 'Videos',
+        'text' => 'Text',
+        'showing' => 'Showing',
+        'of' => 'of',
+        'prompts' => 'prompts',
+        'prompt_label' => 'Prompt:',
+        'result_label' => 'Result:',
+        'copy' => 'Copy',
+        'copied' => 'Copied!',
+        'view_full_size' => 'View Full Size',
+        'video_placeholder' => 'Video content would be displayed here',
+    ],
+    'about' => [
+        'title' => 'About Adit Tanu',
+        'description_1' => 'Founder and creator of this prompt collection website. Adit Tanu is passionate about exploring the creative possibilities of AI-generated content and sharing innovative prompts with the community.',
+        'description_2' => 'This collection showcases various types of prompts and their results, including stunning visual art, comprehensive tutorials, educational guides, and creative scripts. Each prompt is carefully crafted to demonstrate the potential of AI-assisted creativity.',
+        'visual_content' => 'Visual Content',
+        'visual_desc' => 'Creating stunning images and graphics',
+        'educational_content' => 'Educational Content',
+        'educational_desc' => 'Comprehensive guides and tutorials',
+        'video_content' => 'Video Content',
+        'video_desc' => 'Dynamic animations and motion graphics',
+    ],
+    'nav' => [
+        'home' => 'Home',
+        'prompts' => 'Prompts',
+        'about' => 'About',
+        'add_prompt' => 'Add Prompt',
+        'language' => 'Language',
+    ],
+    'footer' => [
+        'copyright' => '© 2025 Prompt Collection by Adit Tanu. All rights reserved.',
+        'tagline' => 'Showcasing the power of creative prompts and AI-generated content',
+    ],
+];
