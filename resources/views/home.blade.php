@@ -32,6 +32,7 @@
                 </a>
             </div>
 
+
             <!-- Stats -->
             <div class="flex justify-center space-x-16 text-center">
                 <div>
