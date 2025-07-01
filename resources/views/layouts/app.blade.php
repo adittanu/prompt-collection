@@ -171,7 +171,7 @@
                 <p class="text-gray-400 mt-2">{{ __('messages.footer.tagline') }}</p>
             </div>
         </div>
-    </footer>    <!-- JavaScript for copy functionality -->
+    </footer>    <!-- JavaScript for copy functionality and filtering -->
     <script>
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(function() {
@@ -188,23 +188,74 @@
             });
         }
 
+        // Filter functionality without page refresh
+        function filterPrompts(type) {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const promptsGrid = document.querySelector('#prompts-grid');
+            const showingText = document.querySelector('#showing-text');
+            
+            // Update active button styling
+            filterButtons.forEach(btn => {
+                btn.classList.remove('bg-black', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+            });
+            
+            const activeButton = document.querySelector(`[data-filter="${type}"]`);
+            if (activeButton) {
+                activeButton.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+                activeButton.classList.add('bg-black', 'text-white');
+            }
+
+            // Show loading state
+            promptsGrid.innerHTML = '<div class="col-span-full text-center py-8"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div><p class="mt-4 text-gray-600">Loading...</p></div>';
+
+            // Fetch filtered data
+            const url = type === 'all' ? '/' : `/prompts/${type}`;
+            
+            fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the prompts grid
+                promptsGrid.innerHTML = data.html;
+                
+                // Update showing text
+                if (showingText) {
+                    showingText.textContent = `{{ __("messages.prompts.showing") }} ${data.count} {{ __("messages.prompts.of") }} ${data.total} {{ __("messages.prompts.prompts") }}`;
+                }
+                
+                // Re-bind search functionality
+                bindSearchFunctionality();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                promptsGrid.innerHTML = '<div class="col-span-full text-center py-8 text-red-600">Error loading prompts</div>';
+            });
+        }
+
         // Search functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.querySelector('input[type="text"]');
+        function bindSearchFunctionality() {
+            const searchInput = document.querySelector('#search-input');
             if (searchInput) {
-                searchInput.addEventListener('input', function(e) {
+                // Remove existing event listeners
+                const newSearchInput = searchInput.cloneNode(true);
+                searchInput.parentNode.replaceChild(newSearchInput, searchInput);
+                
+                newSearchInput.addEventListener('input', function(e) {
                     const searchTerm = e.target.value.toLowerCase();
                     const cards = document.querySelectorAll('.card-hover');
 
                     cards.forEach(card => {
                         const title = card.querySelector('h3').textContent.toLowerCase();
-                        const content = card.querySelector('.text-gray-600').textContent
-                            .toLowerCase();
+                        const content = card.querySelector('.text-gray-600').textContent.toLowerCase();
                         const tags = Array.from(card.querySelectorAll('.bg-gray-100')).map(tag =>
                             tag.textContent.toLowerCase()).join(' ');
 
-                        if (title.includes(searchTerm) || content.includes(searchTerm) || tags
-                            .includes(searchTerm)) {
+                        if (title.includes(searchTerm) || content.includes(searchTerm) || tags.includes(searchTerm)) {
                             card.style.display = 'block';
                         } else {
                             card.style.display = 'none';
@@ -212,6 +263,19 @@
                     });
                 });
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            bindSearchFunctionality();
+            
+            // Bind filter button clicks
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const filterType = this.getAttribute('data-filter');
+                    filterPrompts(filterType);
+                });
+            });
         });
     </script>
 </body>

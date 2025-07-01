@@ -26,6 +26,8 @@ return [
         'copied' => 'Tersalin!',
         'view_full_size' => 'Lihat Ukuran Penuh',
         'video_placeholder' => 'Konten video akan ditampilkan di sini',
+        'loading' => 'Memuat...',
+        'error' => 'Terjadi kesalahan saat memuat prompt',
     ],
     'about' => [
         'title' => 'Tentang Adit Tanu',

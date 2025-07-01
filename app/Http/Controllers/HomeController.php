@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $prompts = Prompt::with('category')->latest()->get();
         $categories = Category::all();
@@ -20,10 +20,20 @@ class HomeController extends Controller
             'text_count' => Prompt::where('content_type', 'text')->count(),
         ];
 
+        // If it's an AJAX request, return JSON
+        if ($request->ajax()) {
+            $html = view('partials.prompt-cards', compact('prompts'))->render();
+            return response()->json([
+                'html' => $html,
+                'count' => $prompts->count(),
+                'total' => $stats['total_prompts']
+            ]);
+        }
+
         return view('home', compact('prompts', 'categories', 'stats'));
     }
 
-    public function filterByType($type)
+    public function filterByType($type, Request $request)
     {
         $prompts = Prompt::with('category')
             ->where('content_type', $type)
@@ -38,6 +48,16 @@ class HomeController extends Controller
             'video_count' => Prompt::where('content_type', 'video')->count(),
             'text_count' => Prompt::where('content_type', 'text')->count(),
         ];
+
+        // If it's an AJAX request, return JSON
+        if ($request->ajax()) {
+            $html = view('partials.prompt-cards', compact('prompts'))->render();
+            return response()->json([
+                'html' => $html,
+                'count' => $prompts->count(),
+                'total' => $stats['total_prompts']
+            ]);
+        }
 
         return view('home', compact('prompts', 'categories', 'stats'));
     }

@@ -26,6 +26,8 @@ return [
         'copied' => 'Copied!',
         'view_full_size' => 'View Full Size',
         'video_placeholder' => 'Video content would be displayed here',
+        'loading' => 'Loading...',
+        'error' => 'Error loading prompts',
     ],
     'about' => [
         'title' => 'About Adit Tanu',
