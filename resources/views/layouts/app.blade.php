@@ -125,21 +125,157 @@
             background: #6366f1;
             color: white;
         }
+
+        /* Mobile menu animations and styles */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+            opacity: 0;
+            z-index: 50;
+            position: relative;
+        }
+
+        .mobile-menu.show {
+            max-height: 500px;
+            opacity: 1;
+            transition: max-height 0.3s ease-in, opacity 0.2s ease-in;
+            overflow: visible;
+        }
+
+        .mobile-menu-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 25;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Ensure mobile menu links are clickable */
+        .mobile-menu a {
+            position: relative;
+            overflow: hidden;
+            z-index: 51;
+            display: block;
+            cursor: pointer;
+        }
+
+        /* Hamburger menu animation */
+        .hamburger-line {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: currentColor;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .hamburger-line:not(:last-child) {
+            margin-bottom: 4px;
+        }
+
+        .hamburger.active .hamburger-line:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .hamburger.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active .hamburger-line:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        /* Mobile menu item hover effects */
+        .mobile-menu a {
+            position: relative;
+            overflow: hidden;
+            z-index: 51;
+            display: block;
+            cursor: pointer;
+        }
+
+        .mobile-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .mobile-menu a:hover::before {
+            left: 100%;
+        }
+
+        /* Language switcher improvements */
+        .language-option {
+            transition: all 0.2s ease;
+        }
+
+        .language-option:hover {
+            transform: translateX(4px);
+        }
+
+        .flag-icon {
+            transition: transform 0.2s ease;
+        }
+
+        .language-option:hover .flag-icon {
+            transform: scale(1.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 2.5rem !important;
+                line-height: 1.2 !important;
+            }
+            
+            .hero-description {
+                font-size: 1rem !important;
+            }
+
+            .filter-btn {
+                font-size: 0.875rem !important;
+                padding: 0.5rem 0.75rem !important;
+            }
+
+            .search-input {
+                font-size: 1rem !important;
+                padding: 0.75rem 2.5rem 0.75rem 2.5rem !important;
+            }
+        }
     </style>
 </head>
 
 <body class="bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-white border-b border-gray-200">
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}" class="text-xl font-bold text-gray-900">
                         Prompt Collection
                     </a>
-                    <span class="ml-2 text-sm text-gray-500">by Adit Tanu</span>
+                    <span class="ml-2 text-sm text-gray-500 hidden sm:inline">by Adit Tanu</span>
                 </div>
-                <div class="flex items-center space-x-8">
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
                     <a href="{{ route('home') }}"
                         class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.home') }}</a>
                     <a href="{{ route('home') }}#prompts"
@@ -187,8 +323,99 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" type="button" 
+                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
+                        aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">{{ __('messages.nav.open_menu') }}</span>
+                        <!-- Animated hamburger icon -->
+                        <div id="hamburger-icon" class="hamburger h-6 w-6 flex flex-col justify-center items-center">
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                            <span class="hamburger-line"></span>
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
+
+        <!-- Mobile menu backdrop -->
+        <div id="mobile-menu-backdrop" class="mobile-menu-backdrop md:hidden"></div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="mobile-menu md:hidden">
+            <div class="px-4 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200 shadow-lg relative z-50">
+                <a href="{{ route('home') }}"
+                    class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                        {{ __('messages.nav.home') }}
+                    </div>
+                </a>
+                <a href="{{ route('home') }}#prompts"
+                    class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                        {{ __('messages.nav.prompts') }}
+                    </div>
+                </a>
+                <a href="{{ route('home') }}#about"
+                    class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ __('messages.nav.about') }}
+                    </div>
+                </a>
+                
+                <!-- Mobile Language Switcher -->
+                <div class="px-4 py-3 border-t border-gray-100 mt-2 relative z-50">
+                    <div class="text-sm font-medium text-gray-500 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                        </svg>
+                        {{ __('messages.nav.language') }}
+                    </div>
+                    <div class="space-y-2">
+                        <a href="{{ route('language.switch', 'id') }}"
+                            class="language-option flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200 relative z-50 {{ app()->getLocale() == 'id' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' : '' }}">
+                            <span class="flag-icon w-6 h-4 mr-3 bg-red-500 relative rounded-sm overflow-hidden">
+                                <span class="absolute inset-0 bg-white"></span>
+                                <span class="absolute bottom-0 left-0 w-full h-2 bg-red-500"></span>
+                            </span>
+                            <span class="font-medium">Indonesia</span>
+                            @if(app()->getLocale() == 'id')
+                                <svg class="w-4 h-4 ml-auto text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            @endif
+                        </a>
+                        <a href="{{ route('language.switch', 'en') }}"
+                            class="language-option flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200 relative z-50 {{ app()->getLocale() == 'en' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' : '' }}">
+                            <span class="flag-icon w-6 h-4 mr-3 bg-blue-500 relative rounded-sm overflow-hidden">
+                                <span class="absolute inset-0 bg-blue-500"></span>
+                                <span class="absolute top-0 left-0 w-full h-1 bg-red-500"></span>
+                                <span class="absolute top-1 left-0 w-full h-1 bg-white"></span>
+                                <span class="absolute top-2 left-0 w-full h-1 bg-red-500"></span>
+                                <span class="absolute top-3 left-0 w-full h-1 bg-white"></span>
+                            </span>
+                            <span class="font-medium">English</span>
+                            @if(app()->getLocale() == 'en')
+                                <svg class="w-4 h-4 ml-auto text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            @endif
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -721,7 +948,92 @@
                     filterPrompts(filterType);
                 });
             });
+
+            // Mobile menu toggle
+            initMobileMenu();
         });
+
+        // Mobile menu functionality
+        function initMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const isOpen = mobileMenu.classList.contains('show');
+                    
+                    if (isOpen) {
+                        // Close menu
+                        closeMobileMenu();
+                    } else {
+                        // Open menu
+                        openMobileMenu();
+                    }
+                });
+
+                // Close mobile menu when clicking on backdrop
+                if (mobileMenuBackdrop) {
+                    mobileMenuBackdrop.addEventListener('click', function() {
+                        closeMobileMenu();
+                    });
+                }
+
+                // Close mobile menu when clicking on links
+                const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+                mobileMenuLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        // Allow the link to work normally, just close the menu after a brief delay
+                        console.log('Mobile menu link clicked:', this.href); // Debug log
+                        
+                        // Don't prevent default - let the link work normally
+                        // Just close the menu with a slight delay for better UX
+                        setTimeout(() => {
+                            closeMobileMenu();
+                        }, 100);
+                    });
+                });
+
+                // Close mobile menu when pressing Escape key
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape' && mobileMenu.classList.contains('show')) {
+                        closeMobileMenu();
+                    }
+                });
+            }
+
+            function openMobileMenu() {
+                mobileMenu.classList.add('show');
+                if (mobileMenuBackdrop) {
+                    mobileMenuBackdrop.classList.add('show');
+                }
+                if (hamburgerIcon) {
+                    hamburgerIcon.classList.add('active');
+                }
+                mobileMenuButton.setAttribute('aria-expanded', 'true');
+                
+                // Don't prevent body scroll - allow users to scroll while menu is open
+                // This improves UX especially on mobile devices
+            }
+
+            function closeMobileMenu() {
+                mobileMenu.classList.remove('show');
+                if (mobileMenuBackdrop) {
+                    mobileMenuBackdrop.classList.remove('show');
+                }
+                if (hamburgerIcon) {
+                    hamburgerIcon.classList.remove('active');
+                }
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+                
+                // Restore body scroll (in case it was disabled)
+                document.body.style.overflow = '';
+            }
+        }
 
         // Add a smooth scroll to top button for better UX when there's a lot of content
         function addScrollToTopButton() {
