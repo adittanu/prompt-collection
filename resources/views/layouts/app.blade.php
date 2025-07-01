@@ -302,20 +302,25 @@
                             <div class="py-1">
                                 <a href="{{ route('language.switch', 'id') }}"
                                     class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'id' ? 'bg-blue-50 text-blue-700' : '' }}">
-                                    <span class="w-6 h-4 mr-2 bg-red-500 relative">
-                                        <span class="absolute inset-0 bg-white"></span>
-                                        <span class="absolute bottom-0 left-0 w-full h-2 bg-red-500"></span>
+                                    <!-- Indonesian Flag: Red on top, White on bottom -->
+                                    <span class="w-6 h-4 mr-2 relative rounded-sm overflow-hidden border border-gray-200">
+                                        <span class="absolute top-0 left-0 w-full h-2 bg-red-500"></span>
+                                        <span class="absolute bottom-0 left-0 w-full h-2 bg-white"></span>
                                     </span>
                                     Indonesia
                                 </a>
                                 <a href="{{ route('language.switch', 'en') }}"
                                     class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'en' ? 'bg-blue-50 text-blue-700' : '' }}">
-                                    <span class="w-6 h-4 mr-2 bg-blue-500 relative">
-                                        <span class="absolute inset-0 bg-blue-500"></span>
-                                        <span class="absolute top-0 left-0 w-full h-1 bg-red-500"></span>
-                                        <span class="absolute top-1 left-0 w-full h-1 bg-white"></span>
-                                        <span class="absolute top-2 left-0 w-full h-1 bg-red-500"></span>
-                                        <span class="absolute top-3 left-0 w-full h-1 bg-white"></span>
+                                    <!-- UK Flag: Simplified Union Jack -->
+                                    <span class="w-6 h-4 mr-2 relative rounded-sm overflow-hidden border border-gray-200 bg-blue-600">
+                                        <!-- Blue background -->
+                                        <span class="absolute inset-0 bg-blue-600"></span>
+                                        <!-- White diagonal crosses -->
+                                        <span class="absolute inset-0" style="background: linear-gradient(45deg, transparent 45%, white 45%, white 55%, transparent 55%), linear-gradient(-45deg, transparent 45%, white 45%, white 55%, transparent 55%)"></span>
+                                        <!-- Red cross vertical -->
+                                        <span class="absolute left-1/2 top-0 w-0.5 h-full bg-red-500 transform -translate-x-1/2"></span>
+                                        <!-- Red cross horizontal -->
+                                        <span class="absolute top-1/2 left-0 w-full h-0.5 bg-red-500 transform -translate-y-1/2"></span>
                                     </span>
                                     English
                                 </a>
@@ -386,9 +391,10 @@
                     <div class="space-y-2">
                         <a href="{{ route('language.switch', 'id') }}"
                             class="language-option flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200 relative z-50 {{ app()->getLocale() == 'id' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' : '' }}">
-                            <span class="flag-icon w-6 h-4 mr-3 bg-red-500 relative rounded-sm overflow-hidden">
-                                <span class="absolute inset-0 bg-white"></span>
-                                <span class="absolute bottom-0 left-0 w-full h-2 bg-red-500"></span>
+                            <!-- Indonesian Flag: Red on top, White on bottom -->
+                            <span class="flag-icon w-6 h-4 mr-3 relative rounded-sm overflow-hidden border border-gray-200">
+                                <span class="absolute top-0 left-0 w-full h-2 bg-red-500"></span>
+                                <span class="absolute bottom-0 left-0 w-full h-2 bg-white"></span>
                             </span>
                             <span class="font-medium">Indonesia</span>
                             @if(app()->getLocale() == 'id')
@@ -399,12 +405,16 @@
                         </a>
                         <a href="{{ route('language.switch', 'en') }}"
                             class="language-option flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200 relative z-50 {{ app()->getLocale() == 'en' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' : '' }}">
-                            <span class="flag-icon w-6 h-4 mr-3 bg-blue-500 relative rounded-sm overflow-hidden">
-                                <span class="absolute inset-0 bg-blue-500"></span>
-                                <span class="absolute top-0 left-0 w-full h-1 bg-red-500"></span>
-                                <span class="absolute top-1 left-0 w-full h-1 bg-white"></span>
-                                <span class="absolute top-2 left-0 w-full h-1 bg-red-500"></span>
-                                <span class="absolute top-3 left-0 w-full h-1 bg-white"></span>
+                            <!-- UK Flag: Simplified Union Jack -->
+                            <span class="flag-icon w-6 h-4 mr-3 relative rounded-sm overflow-hidden border border-gray-200 bg-blue-600">
+                                <!-- Blue background -->
+                                <span class="absolute inset-0 bg-blue-600"></span>
+                                <!-- White diagonal crosses -->
+                                <span class="absolute inset-0" style="background: linear-gradient(45deg, transparent 45%, white 45%, white 55%, transparent 55%), linear-gradient(-45deg, transparent 45%, white 45%, white 55%, transparent 55%)"></span>
+                                <!-- Red cross vertical -->
+                                <span class="absolute left-1/2 top-0 w-0.5 h-full bg-red-500 transform -translate-x-1/2"></span>
+                                <!-- Red cross horizontal -->
+                                <span class="absolute top-1/2 left-0 w-full h-0.5 bg-red-500 transform -translate-y-1/2"></span>
                             </span>
                             <span class="font-medium">English</span>
                             @if(app()->getLocale() == 'en')
