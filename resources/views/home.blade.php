@@ -4,39 +4,47 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="gradient-bg text-white py-20">
+    <section class="bg-white py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-5xl font-bold mb-4">Prompt Collection</h1>
-            <p class="text-xl mb-2">by Adit Tanu</p>
-            <h2 class="text-3xl font-semibold mb-6">Creative Prompts & Results</h2>
-            <p class="text-lg mb-8 max-w-2xl mx-auto">
+            <h1 class="text-6xl font-bold text-gray-900 mb-6">Creative Prompts & Results</h1>
+            <p class="text-xl text-gray-600 max-w-4xl mx-auto mb-12">
                 Explore a curated collection of prompts and their amazing results. From stunning
                 images and videos to comprehensive guides and tutorials.
             </p>
-            <div class="flex justify-center space-x-8 mb-8">
+
+            <div class="flex justify-center space-x-6 mb-16">
                 <a href="#prompts"
-                    class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
+                    class="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z">
+                        </path>
+                    </svg>
                     Explore Collection
                 </a>
                 <a href="#prompts"
-                    class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition">
+                    class="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
                     Popular Prompts
                 </a>
             </div>
 
             <!-- Stats -->
-            <div class="flex justify-center space-x-8 text-center">
+            <div class="flex justify-center space-x-16 text-center">
                 <div>
-                    <div class="text-2xl font-bold">{{ $stats['total_prompts'] ?? 8 }}+</div>
-                    <div class="text-sm opacity-90">Total Prompts</div>
+                    <div class="text-4xl font-bold text-blue-600 mb-2">{{ $stats['total_prompts'] ?? 8 }}+</div>
+                    <div class="text-gray-600 font-medium">Total Prompts</div>
                 </div>
                 <div>
-                    <div class="text-2xl font-bold">{{ $stats['content_types'] ?? 3 }}</div>
-                    <div class="text-sm opacity-90">Content Types</div>
+                    <div class="text-4xl font-bold text-green-600 mb-2">{{ $stats['content_types'] ?? 3 }}</div>
+                    <div class="text-gray-600 font-medium">Content Types</div>
                 </div>
                 <div>
-                    <div class="text-2xl font-bold">100%</div>
-                    <div class="text-sm opacity-90">Quality Results</div>
+                    <div class="text-4xl font-bold text-purple-600 mb-2">100%</div>
+                    <div class="text-gray-600 font-medium">Quality Results</div>
                 </div>
             </div>
         </div>
@@ -45,45 +53,60 @@
     <!-- Prompts Section -->
     <section id="prompts" class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 class="text-2xl font-bold text-gray-900 mb-8">Prompt Collection</h3>
+            <div class="text-center mb-12">
+                <h3 class="text-4xl font-bold text-gray-900 mb-8">Prompt Collection</h3>
 
-            <!-- Filter Buttons -->
-            <div class="flex flex-wrap gap-4 mb-8">
-                <a href="{{ route('home') }}"
-                    class="px-6 py-2 rounded-full {{ !request()->segment(2) ? 'bg-black text-white' : 'bg-white text-gray-700 border' }} hover:bg-gray-800 hover:text-white transition">
-                    All Prompts ({{ $stats['total_prompts'] ?? $prompts->count() }})
-                </a>
-                <a href="{{ route('prompts.filter', 'image') }}"
-                    class="px-6 py-2 rounded-full {{ request()->segment(2) == 'image' ? 'bg-black text-white' : 'bg-white text-gray-700 border' }} hover:bg-gray-800 hover:text-white transition flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                    Images ({{ $stats['image_count'] ?? 0 }})
-                </a>
-                <a href="{{ route('prompts.filter', 'video') }}"
-                    class="px-6 py-2 rounded-full {{ request()->segment(2) == 'video' ? 'bg-black text-white' : 'bg-white text-gray-700 border' }} hover:bg-gray-800 hover:text-white transition flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                    Videos ({{ $stats['video_count'] ?? 0 }})
-                </a>
-                <a href="{{ route('prompts.filter', 'text') }}"
-                    class="px-6 py-2 rounded-full {{ request()->segment(2) == 'text' ? 'bg-black text-white' : 'bg-white text-gray-700 border' }} hover:bg-gray-800 hover:text-white transition flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
-                    </svg>
-                    Text ({{ $stats['text_count'] ?? 0 }})
-                </a>
+                <!-- Search Bar -->
+                <div class="max-w-2xl mx-auto mb-8">
+                    <div class="relative">
+                        <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <input type="text" placeholder="Search prompts, descriptions, or tags..."
+                            class="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
+                    </div>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="flex justify-center flex-wrap gap-4 mb-8">
+                    <a href="{{ route('home') }}"
+                        class="px-6 py-3 rounded-xl {{ !request()->segment(2) ? 'bg-black text-white' : 'bg-white text-gray-700 border border-gray-300' }} hover:bg-gray-800 hover:text-white transition font-medium">
+                        All Prompts ({{ $stats['total_prompts'] ?? $prompts->count() }})
+                    </a>
+                    <a href="{{ route('prompts.filter', 'image') }}"
+                        class="px-6 py-3 rounded-xl {{ request()->segment(2) == 'image' ? 'bg-black text-white' : 'bg-white text-gray-700 border border-gray-300' }} hover:bg-gray-800 hover:text-white transition flex items-center font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Images ({{ $stats['image_count'] ?? 0 }})
+                    </a>
+                    <a href="{{ route('prompts.filter', 'video') }}"
+                        class="px-6 py-3 rounded-xl {{ request()->segment(2) == 'video' ? 'bg-black text-white' : 'bg-white text-gray-700 border border-gray-300' }} hover:bg-gray-800 hover:text-white transition flex items-center font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Videos ({{ $stats['video_count'] ?? 0 }})
+                    </a>
+                    <a href="{{ route('prompts.filter', 'text') }}"
+                        class="px-6 py-3 rounded-xl {{ request()->segment(2) == 'text' ? 'bg-black text-white' : 'bg-white text-gray-700 border border-gray-300' }} hover:bg-gray-800 hover:text-white transition flex items-center font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        Text ({{ $stats['text_count'] ?? 0 }})
+                    </a>
+                </div>
+
+                <p class="text-gray-600 text-lg">Showing {{ $prompts->count() }} of
+                    {{ $stats['total_prompts'] ?? $prompts->count() }} prompts</p>
             </div>
-
-            <p class="text-gray-600 mb-8">Showing {{ $prompts->count() }} of
-                {{ $stats['total_prompts'] ?? $prompts->count() }} prompts</p>
 
             <!-- Prompt Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -111,7 +134,8 @@
                                             </path>
                                         </svg>
                                     @else
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                             </path>

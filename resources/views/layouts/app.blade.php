@@ -75,26 +75,23 @@
 
 <body class="bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
+    <nav class="bg-white border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="text-2xl font-bold text-gray-900">
+                    <a href="{{ route('home') }}" class="text-xl font-bold text-gray-900">
                         Prompt Collection
                     </a>
-                    <span class="ml-2 text-gray-500">by Adit Tanu</span>
+                    <span class="ml-2 text-sm text-gray-500">by Adit Tanu</span>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('home') }}"
-                        class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md">Home</a>
+                <div class="flex items-center space-x-8">
+                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-gray-900 font-medium">Home</a>
                     <a href="{{ route('home') }}#prompts"
-                        class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md">Prompts</a>
-                    <a href="{{ route('home') }}#about"
-                        class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md">About</a>
-                    <a href="{{ route('prompt.create') }}"
-                        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Add Prompt</a>
+                        class="text-gray-700 hover:text-gray-900 font-medium">Prompts</a>
+                    <a href="{{ route('home') }}#about" class="text-gray-700 hover:text-gray-900 font-medium">About</a>
                 </div>
             </div>
+        </div>
         </div>
     </nav>
 
@@ -143,9 +140,7 @@
                 <p class="text-gray-400 mt-2">Showcasing the power of creative prompts and AI-generated content</p>
             </div>
         </div>
-    </footer>
-
-    <!-- JavaScript for copy functionality -->
+    </footer> <!-- JavaScript for copy functionality -->
     <script>
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(function() {
@@ -161,6 +156,32 @@
                 }, 2000);
             });
         }
+
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('input[type="text"]');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const cards = document.querySelectorAll('.card-hover');
+
+                    cards.forEach(card => {
+                        const title = card.querySelector('h3').textContent.toLowerCase();
+                        const content = card.querySelector('.text-gray-600').textContent
+                            .toLowerCase();
+                        const tags = Array.from(card.querySelectorAll('.bg-gray-100')).map(tag =>
+                            tag.textContent.toLowerCase()).join(' ');
+
+                        if (title.includes(searchTerm) || content.includes(searchTerm) || tags
+                            .includes(searchTerm)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
     </script>
 </body>
 
