@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Prompt;
 
 class PromptSeeder extends Seeder
 {
@@ -12,86 +13,176 @@ class PromptSeeder extends Seeder
      */
     public function run(): void
     {
-        $prompts = [
+        // Define base prompts for variety
+        $basePrompts = [
+            // Image prompts
             [
                 'title' => 'Abstract Digital Art',
                 'prompt_text' => 'Create a vibrant abstract digital artwork with flowing colors and geometric shapes, incorporating gradients from blue to purple with golden accents',
                 'result_content' => 'A stunning abstract composition with vibrant colors and dynamic shapes',
                 'content_type' => 'image',
-                'image_url' => 'https://krpjnzoc.manus.space/assets/background-CMMk0iMF.jpg',
-                'category_id' => 1, // Digital Art
+                'image_url' => 'https://picsum.photos/400/300?random=1',
+                'category_id' => 1,
                 'tags' => ['abstract', 'digital art', 'colorful', 'geometric'],
                 'is_featured' => true,
             ],
             [
-                'title' => 'Script Writing Guide',
-                'prompt_text' => 'Write a comprehensive guide for creating engaging video scripts that capture audience attention and drive engagement',
-                'result_content' => "# Complete Video Script Writing Guide\n\n## 1. Understanding Your Audience\n- Define your target demographic\n- Research their interests and pain points\n- Adapt your tone and style accordingly\n\n## 2. Story Structure\n- Hook: Grab attention in the first 5 seconds\n- Setup: Introduce the problem or topic\n- Conflict: Present challenges or obstacles\n- Resolution: Provide solutions or conclusions\n\n## 3. Writing Techniques\n- Use conversational language\n- Include emotional triggers\n- Add visual cues for editors\n- Keep sentences short and punchy\n\n## 4. Call-to-Action\n- Be clear and specific\n- Create urgency when appropriate\n- Make it easy to follow through\n\n## 5. Templates and Examples\n- Educational content template\n- Entertainment script structure\n- Product demonstration format",
-                'content_type' => 'text',
-                'category_id' => 2, // Writing
-                'tags' => ['writing', 'video', 'content creation', 'storytelling'],
+                'title' => 'Futuristic City Landscape',
+                'prompt_text' => 'Design a futuristic cityscape with flying cars, neon lights, and towering skyscrapers against a sunset sky',
+                'result_content' => 'A breathtaking vision of urban future with advanced technology',
+                'content_type' => 'image',
+                'image_url' => 'https://picsum.photos/400/300?random=2',
+                'category_id' => 1,
+                'tags' => ['futuristic', 'city', 'sci-fi', 'landscape'],
                 'is_featured' => false,
             ],
             [
                 'title' => 'React.js Learning Path',
                 'prompt_text' => 'Create a comprehensive step-by-step tutorial for learning React.js from beginner to intermediate level',
-                'result_content' => "# React.js Complete Learning Path\n\n## Phase 1: Foundations (Week 1-2)\n- JavaScript ES6+ fundamentals\n- Understanding the DOM\n- Introduction to React concepts\n\n## Phase 2: Core Concepts (Week 3-4)\n- Components and JSX\n- Props and state management\n- Event handling and forms\n- Conditional rendering and lists\n\n## Phase 3: Advanced Features (Week 5-6)\n- React Hooks (useState, useEffect, useContext)\n- Custom hooks creation\n- Component lifecycle\n- Error boundaries\n\n## Phase 4: State Management (Week 7-8)\n- Context API\n- Redux basics\n- State management patterns\n- Performance optimization\n\n## Phase 5: Real-world Application (Week 9-10)\n- Building a complete project\n- API integration\n- Testing with Jest\n- Deployment strategies\n\n## Resources:\n- Official React documentation\n- Practice projects and exercises\n- Community forums and support",
+                'result_content' => "# React.js Complete Learning Path\n\n## Phase 1: Foundations\n- JavaScript ES6+ fundamentals\n- Understanding the DOM\n- Introduction to React concepts\n\nComplete tutorial with practical examples and exercises.",
                 'content_type' => 'text',
-                'category_id' => 3, // Tutorials
-                'tags' => ['react', 'javascript', 'web development', 'tutorial'],
+                'category_id' => 3,
+                'tags' => ['react', 'javascript', 'tutorial', 'web development'],
                 'is_featured' => true,
             ],
             [
-                'title' => 'Online Teaching Methodology',
-                'prompt_text' => 'Develop a comprehensive teaching methodology for effective online education that maximizes student engagement',
-                'result_content' => "# Modern Online Teaching Methodology\n\n## 1. Interactive Learning Strategies\n- Live polls and quizzes during sessions\n- Breakout rooms for small group discussions\n- Gamification elements and rewards\n- Real-time Q&A sessions\n\n## 2. Multimedia Content Integration\n- Video lectures with visual aids\n- Interactive presentations\n- Screen sharing and demonstrations\n- Virtual whiteboards and collaboration tools\n\n## 3. Assessment Techniques\n- Formative assessments throughout lessons\n- Peer review and feedback systems\n- Project-based evaluations\n- Self-assessment tools\n\n## 4. Student Engagement Methods\n- Regular check-ins and feedback\n- Discussion forums and chat features\n- Virtual office hours\n- Collaborative projects and assignments\n\n## 5. Technology Tools\n- Learning Management Systems (LMS)\n- Video conferencing platforms\n- Interactive content creation tools\n- Progress tracking and analytics\n\n## 6. Best Practices\n- Clear communication guidelines\n- Structured lesson plans\n- Regular breaks and variety\n- Accessibility considerations",
-                'content_type' => 'text',
-                'category_id' => 4, // Education
-                'tags' => ['education', 'online learning', 'teaching', 'methodology'],
-                'is_featured' => false,
-            ],
-            [
-                'title' => 'Professional Website Banner',
-                'prompt_text' => 'Design a modern, professional website banner with clean typography and contemporary design elements',
-                'result_content' => 'Clean and professional banner design for modern websites',
-                'content_type' => 'image',
-                'image_url' => 'https://krpjnzoc.manus.space/assets/banner-DROBM898.jpg',
-                'category_id' => 5, // Web Design
-                'tags' => ['web design', 'banner', 'professional', 'modern'],
-                'is_featured' => false,
-            ],
-            [
-                'title' => 'Python Data Analysis Tutorial',
-                'prompt_text' => 'Create a beginner-friendly tutorial for data analysis using Python, pandas, and matplotlib',
-                'result_content' => "# Python Data Analysis Tutorial\n\n## Getting Started\n- Install Python and required libraries\n- Set up Jupyter Notebook environment\n- Import essential libraries (pandas, numpy, matplotlib)\n\n## Data Loading and Exploration\n- Reading CSV, Excel, and JSON files\n- Basic data inspection methods\n- Understanding data types and structure\n\n## Data Cleaning\n- Handling missing values\n- Removing duplicates\n- Data type conversions\n- Outlier detection and treatment\n\n## Data Analysis Techniques\n- Descriptive statistics\n- Grouping and aggregation\n- Filtering and sorting\n- Correlation analysis\n\n## Data Visualization\n- Creating basic plots with matplotlib\n- Advanced visualizations with seaborn\n- Interactive plots with plotly\n- Best practices for data presentation\n\n## Practical Project\n- Complete analysis of a real dataset\n- Step-by-step walkthrough\n- Common pitfalls and solutions",
-                'content_type' => 'text',
-                'category_id' => 6, // Data Analysis
-                'tags' => ['python', 'data analysis', 'pandas', 'tutorial'],
-                'is_featured' => true,
-            ],
-            [
-                'title' => 'Social Media Strategy Guide',
-                'prompt_text' => 'Develop a comprehensive social media strategy guide for small businesses and content creators',
-                'result_content' => "# Complete Social Media Strategy Guide\n\n## 1. Platform Selection\n- Understand each platform's audience\n- Choose 2-3 platforms to focus on\n- Align platform choice with business goals\n\n## 2. Content Planning\n- Create a content calendar\n- Mix of educational, entertaining, and promotional content\n- User-generated content strategies\n- Trending topics and hashtag research\n\n## 3. Engagement Strategies\n- Respond to comments and messages promptly\n- Create interactive content (polls, Q&As)\n- Collaborate with other creators\n- Build a community around your brand\n\n## 4. Analytics and Optimization\n- Track key performance metrics\n- A/B test different content types\n- Optimize posting times and frequency\n- Adjust strategy based on data insights\n\n## 5. Growth Tactics\n- Consistent posting schedule\n- Cross-platform promotion\n- Influencer partnerships\n- Paid advertising strategies",
-                'content_type' => 'text',
-                'category_id' => 7, // Marketing
-                'tags' => ['social media', 'marketing', 'strategy', 'business'],
-                'is_featured' => false,
-            ],
-            [
-                'title' => 'Motion Graphics Animation',
-                'prompt_text' => 'Create a dynamic motion graphics animation showcasing modern design principles with smooth transitions',
-                'result_content' => 'Professional motion graphics with kinetic typography and smooth animations',
+                'title' => 'Product Demo Animation',
+                'prompt_text' => 'Create an engaging product demonstration video showing the key features and benefits of a mobile app',
+                'result_content' => 'A dynamic video showcasing app functionality with smooth animations and clear explanations',
                 'content_type' => 'video',
-                'video_url' => '#',
-                'category_id' => 8, // Motion Graphics
-                'tags' => ['motion graphics', 'animation', 'video', 'design'],
+                'category_id' => 5,
+                'tags' => ['product demo', 'animation', 'mobile app', 'video'],
                 'is_featured' => false,
             ],
         ];
 
-        foreach ($prompts as $prompt) {
-            \App\Models\Prompt::create($prompt);
+        // Additional prompt templates for bulk generation
+        $promptTemplates = [
+            'image' => [
+                'titles' => [
+                    'Artistic Portrait', 'Nature Photography', 'Urban Architecture', 'Food Styling', 'Product Photography',
+                    'Landscape Scene', 'Character Design', 'Infographic Design', 'Social Media Graphics', 'Book Cover Design',
+                    'Website Banner', 'Logo Concept', 'Icon Set', 'Illustration Style', 'Digital Painting',
+                    'Photo Manipulation', 'Poster Design', 'Brand Identity', 'User Interface', 'Mobile App Design'
+                ],
+                'prompts' => [
+                    'Create a stunning visual composition with modern design principles',
+                    'Design an eye-catching graphic with bold colors and clean typography',
+                    'Develop a creative concept that captures attention and communicates effectively',
+                    'Produce a professional image with high-quality visual elements',
+                    'Generate an artistic piece that combines creativity with functionality'
+                ],
+                'results' => [
+                    'A visually striking composition that exceeds creative expectations',
+                    'A professional design that perfectly balances aesthetics and functionality',
+                    'An innovative visual solution that captures the essence of the concept',
+                    'A high-quality image that demonstrates exceptional creative skill',
+                    'A compelling visual narrative that engages and inspires viewers'
+                ]
+            ],
+            'text' => [
+                'titles' => [
+                    'SEO Content Strategy', 'Email Marketing Guide', 'Social Media Plan', 'Blog Writing Tips', 'Copywriting Techniques',
+                    'Technical Documentation', 'User Manual Creation', 'Marketing Copy', 'Press Release Writing', 'Newsletter Content',
+                    'Website Content', 'Product Descriptions', 'Landing Page Copy', 'Ad Campaign Text', 'Brand Messaging',
+                    'Content Calendar', 'Editorial Guidelines', 'Style Guide Creation', 'Storytelling Framework', 'Writing Workshop'
+                ],
+                'prompts' => [
+                    'Write comprehensive content that provides value and engages the target audience',
+                    'Create informative text that educates readers while maintaining their interest',
+                    'Develop persuasive copy that drives action and achieves business objectives',
+                    'Produce well-researched content that establishes authority and builds trust',
+                    'Generate engaging text that connects with readers on an emotional level'
+                ],
+                'results' => [
+                    'Comprehensive content that delivers exceptional value to readers while achieving strategic goals',
+                    'Well-crafted text that perfectly balances information with engagement and readability',
+                    'Persuasive copy that effectively communicates key messages and drives desired actions',
+                    'Professional content that establishes credibility and builds lasting audience relationships',
+                    'Compelling narrative that resonates with target audiences and supports business objectives'
+                ]
+            ],
+            'video' => [
+                'titles' => [
+                    'Brand Story Video', 'Tutorial Series', 'Product Launch', 'Company Culture', 'Customer Testimonials',
+                    'Animated Explainer', 'Training Video', 'Event Coverage', 'Social Media Content', 'Documentary Style',
+                    'Promotional Campaign', 'How-to Guide', 'Behind the Scenes', 'Live Streaming', 'Video Podcast',
+                    'Motion Graphics', 'Commercial Ad', 'Educational Series', 'Interview Format', 'Virtual Event'
+                ],
+                'prompts' => [
+                    'Produce engaging video content that tells a compelling story and connects with viewers',
+                    'Create informative video material that educates while maintaining audience engagement',
+                    'Develop dynamic video content that showcases products or services effectively',
+                    'Generate professional video content that builds brand awareness and trust',
+                    'Create entertaining video content that goes viral and increases reach'
+                ],
+                'results' => [
+                    'High-quality video content that effectively communicates key messages and engages target audiences',
+                    'Professional video production that showcases expertise and builds credibility with viewers',
+                    'Compelling visual storytelling that creates emotional connections and drives viewer action',
+                    'Dynamic video content that stands out in crowded feeds and generates meaningful engagement',
+                    'Polished video material that reflects brand values and supports marketing objectives'
+                ]
+            ]
+        ];
+
+        // Generate 100 prompts
+        $generatedPrompts = [];
+        
+        // Add base prompts first
+        foreach ($basePrompts as $prompt) {
+            $generatedPrompts[] = $prompt;
         }
+
+        // Generate additional prompts to reach 100
+        $currentCount = count($basePrompts);
+        $randomIndex = 1;
+
+        while ($currentCount < 100) {
+            foreach (['image', 'text', 'video'] as $type) {
+                if ($currentCount >= 100) break;
+
+                $templates = $promptTemplates[$type];
+                $titleIndex = $randomIndex % count($templates['titles']);
+                $promptIndex = $randomIndex % count($templates['prompts']);
+                $resultIndex = $randomIndex % count($templates['results']);
+
+                $prompt = [
+                    'title' => $templates['titles'][$titleIndex] . ' #' . $randomIndex,
+                    'prompt_text' => $templates['prompts'][$promptIndex],
+                    'result_content' => $templates['results'][$resultIndex],
+                    'content_type' => $type,
+                    'category_id' => rand(1, 5),
+                    'tags' => $this->generateRandomTags($type),
+                    'is_featured' => rand(0, 10) < 2, // 20% chance of being featured
+                ];
+
+                if ($type === 'image') {
+                    $prompt['image_url'] = 'https://picsum.photos/400/300?random=' . ($randomIndex + 100);
+                }
+
+                $generatedPrompts[] = $prompt;
+                $currentCount++;
+                $randomIndex++;
+            }
+        }
+
+        // Insert all prompts
+        foreach ($generatedPrompts as $promptData) {
+            Prompt::create($promptData);
+        }
+    }
+
+    private function generateRandomTags($contentType)
+    {
+        $tagPools = [
+            'image' => ['design', 'creative', 'visual', 'art', 'graphics', 'professional', 'modern', 'colorful', 'minimal', 'bold'],
+            'text' => ['writing', 'content', 'marketing', 'guide', 'tutorial', 'strategy', 'tips', 'best practices', 'professional', 'comprehensive'],
+            'video' => ['video', 'animation', 'production', 'storytelling', 'visual', 'engaging', 'professional', 'dynamic', 'creative', 'marketing']
+        ];
+
+        $tags = $tagPools[$contentType];
+        $selectedTags = array_rand(array_flip($tags), rand(3, 5));
+        return is_array($selectedTags) ? $selectedTags : [$selectedTags];
     }
 }

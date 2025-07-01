@@ -28,12 +28,61 @@
         }
 
         .copy-btn {
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .copy-btn:hover {
-            background-color: #3b82f6;
-            transform: scale(1.05);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .copy-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .copy-btn:hover::before {
+            left: 100%;
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+
+        .bounce {
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(-25%);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: none;
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
         }
 
         .tag {
@@ -183,18 +232,115 @@
     </footer> <!-- JavaScript for copy functionality and filtering -->
     <script>
         function copyToClipboard(text) {
+            const button = event.target.closest('button');
+            const originalHTML = button.innerHTML;
+            const originalClasses = button.className;
+            
+            // Add loading animation
+            button.innerHTML = `
+                <svg class="w-4 h-4 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                {{ __('messages.prompts.copying') ?? 'Copying...' }}
+            `;
+            button.disabled = true;
+            button.className = 'inline-flex items-center px-3 py-1 border border-blue-300 rounded-md text-sm font-medium text-blue-700 bg-blue-50 transition cursor-not-allowed';
+
             navigator.clipboard.writeText(text).then(function() {
-                // Show success message
-                const button = event.target;
-                const originalText = button.textContent;
-                button.textContent = '{{ __('messages.prompts.copied') }}';
-                button.classList.add('bg-green-500');
+                // Success animation
+                button.innerHTML = `
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    {{ __('messages.prompts.copied') }}
+                `;
+                button.className = 'inline-flex items-center px-3 py-1 border border-green-300 rounded-md text-sm font-medium text-green-700 bg-green-50 transition transform scale-105';
+                
+                // Add success pulse animation
+                button.animate([
+                    { transform: 'scale(1.05)' },
+                    { transform: 'scale(1.1)' },
+                    { transform: 'scale(1.05)' }
+                ], {
+                    duration: 200,
+                    easing: 'ease-in-out'
+                });
+
+                // Show toast notification
+                showToast('{{ __('messages.prompts.copied') }}', 'success');
 
                 setTimeout(() => {
-                    button.textContent = originalText;
-                    button.classList.remove('bg-green-500');
+                    // Fade back to original state
+                    button.style.transition = 'all 0.3s ease';
+                    button.innerHTML = originalHTML;
+                    button.className = originalClasses;
+                    button.disabled = false;
+                    
+                    // Remove transition after animation
+                    setTimeout(() => {
+                        button.style.transition = '';
+                    }, 300);
+                }, 1500);
+            }).catch(function(err) {
+                // Error state
+                button.innerHTML = `
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    {{ __('messages.prompts.copy_failed') ?? 'Failed' }}
+                `;
+                button.className = 'inline-flex items-center px-3 py-1 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-red-50 transition';
+                
+                // Show error toast
+                showToast('{{ __('messages.prompts.copy_failed') ?? 'Copy failed' }}', 'error');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.className = originalClasses;
+                    button.disabled = false;
                 }, 2000);
             });
+        }
+
+        function showToast(message, type = 'success') {
+            // Remove existing toast if any
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center space-x-2 transform translate-x-full transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            
+            toast.innerHTML = `
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    ${type === 'success' 
+                        ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>'
+                        : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>'
+                    }
+                </svg>
+                <span class="font-medium">${message}</span>
+            `;
+
+            document.body.appendChild(toast);
+
+            // Animate in
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+
+            // Animate out and remove
+            setTimeout(() => {
+                toast.style.transform = 'translateX(full)';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 2000);
         }
 
         // Filter functionality without page refresh
