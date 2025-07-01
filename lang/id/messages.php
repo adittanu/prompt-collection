@@ -30,6 +30,7 @@ return [
         'video_placeholder' => 'Konten video akan ditampilkan di sini',
         'loading' => 'Memuat...',
         'error' => 'Terjadi kesalahan saat memuat prompt',
+        'load_more' => 'Muat Lebih Banyak',
     ],
     'about' => [
         'title' => 'Tentang Adit Tanu',

@@ -114,6 +114,16 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="prompts-grid">
                 @include('partials.prompt-cards', ['prompts' => $prompts])
             </div>
+
+            <!-- Load More Button -->
+            @if($prompts->hasMorePages())
+            <div class="text-center mt-12" id="load-more-container">
+                <button id="load-more-btn" onclick="loadMorePrompts()" 
+                        class="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition">
+                    {{ __('messages.prompts.load_more') }}
+                </button>
+            </div>
+            @endif
         </div>
     </section>
 

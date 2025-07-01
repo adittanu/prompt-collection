@@ -30,6 +30,7 @@ return [
         'video_placeholder' => 'Video content would be displayed here',
         'loading' => 'Loading...',
         'error' => 'Error loading prompts',
+        'load_more' => 'Load More Prompts',
     ],
     'about' => [
         'title' => 'About Adit Tanu',

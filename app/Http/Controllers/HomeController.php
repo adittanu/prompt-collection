@@ -10,7 +10,8 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $prompts = Prompt::with('category')->latest()->get();
+        $perPage = 12; // Show 12 prompts per page
+        $prompts = Prompt::with('category')->latest()->paginate($perPage);
         $categories = Category::all();
         $stats = [
             'total_prompts' => Prompt::count(),
@@ -26,7 +27,9 @@ class HomeController extends Controller
             return response()->json([
                 'html' => $html,
                 'count' => $prompts->count(),
-                'total' => $stats['total_prompts']
+                'total' => $stats['total_prompts'],
+                'hasMorePages' => $prompts->hasMorePages(),
+                'nextPageUrl' => $prompts->nextPageUrl()
             ]);
         }
 
@@ -35,10 +38,11 @@ class HomeController extends Controller
 
     public function filterByType($type, Request $request)
     {
+        $perPage = 12; // Show 12 prompts per page
         $prompts = Prompt::with('category')
             ->where('content_type', $type)
             ->latest()
-            ->get();
+            ->paginate($perPage);
         $categories = Category::all();
 
         $stats = [
@@ -55,7 +59,9 @@ class HomeController extends Controller
             return response()->json([
                 'html' => $html,
                 'count' => $prompts->count(),
-                'total' => $stats['total_prompts']
+                'total' => $stats['total_prompts'],
+                'hasMorePages' => $prompts->hasMorePages(),
+                'nextPageUrl' => $prompts->nextPageUrl()
             ]);
         }
 

@@ -344,10 +344,21 @@
         }
 
         // Filter functionality without page refresh
+        let currentFilter = 'all';
+        let isLoading = false;
+        let hasMorePages = true;
+        let nextPageUrl = null;
+
         function filterPrompts(type) {
             const filterButtons = document.querySelectorAll('.filter-btn');
             const promptsGrid = document.querySelector('#prompts-grid');
             const showingText = document.querySelector('#showing-text');
+            
+            // Reset pagination state
+            currentFilter = type;
+            isLoading = false;
+            hasMorePages = true;
+            nextPageUrl = null;
 
             // Update active button styling
             filterButtons.forEach(btn => {
@@ -378,6 +389,10 @@
                 .then(data => {
                     // Update the prompts grid
                     promptsGrid.innerHTML = data.html;
+                    
+                    // Update pagination state
+                    hasMorePages = data.hasMorePages;
+                    nextPageUrl = data.nextPageUrl;
 
                     // Update showing text
                     if (showingText) {
@@ -387,12 +402,127 @@
 
                     // Re-bind search functionality
                     bindSearchFunctionality();
+                    
+                    // Show load more button if there are more pages
+                    showLoadMoreButton();
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     promptsGrid.innerHTML =
                         '<div class="col-span-full text-center py-8 text-red-600">Error loading prompts</div>';
                 });
+        }
+
+        function loadMorePrompts() {
+            if (isLoading || !hasMorePages || !nextPageUrl) return;
+
+            isLoading = true;
+            const loadMoreBtn = document.querySelector('#load-more-btn');
+            const promptsGrid = document.querySelector('#prompts-grid');
+            
+            if (loadMoreBtn) {
+                loadMoreBtn.innerHTML = `
+                    <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Loading...
+                `;
+                loadMoreBtn.disabled = true;
+            }
+
+            fetch(nextPageUrl, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Append new cards to existing grid
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = data.html;
+                
+                while (tempDiv.firstChild) {
+                    promptsGrid.appendChild(tempDiv.firstChild);
+                }
+                
+                // Update pagination state
+                hasMorePages = data.hasMorePages;
+                nextPageUrl = data.nextPageUrl;
+                
+                // Update showing text
+                const showingText = document.querySelector('#showing-text');
+                if (showingText) {
+                    const currentCount = promptsGrid.children.length;
+                    showingText.textContent = `{{ __('messages.prompts.showing') }} ${currentCount} {{ __('messages.prompts.of') }} ${data.total} {{ __('messages.prompts.prompts') }}`;
+                }
+                
+                // Re-bind search functionality
+                bindSearchFunctionality();
+
+                // Update load more button
+                showLoadMoreButton();
+                
+                isLoading = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                isLoading = false;
+                if (loadMoreBtn) {
+                    loadMoreBtn.innerHTML = 'Load More Prompts';
+                    loadMoreBtn.disabled = false;
+                }
+            });
+        }
+
+        function showLoadMoreButton() {
+            const loadMoreContainer = document.querySelector('#load-more-container');
+            const loadMoreBtn = document.querySelector('#load-more-btn');
+            
+            if (hasMorePages) {
+                if (!loadMoreContainer) {
+                    // Create load more button if it doesn't exist
+                    const container = document.createElement('div');
+                    container.id = 'load-more-container';
+                    container.className = 'text-center mt-12';
+                    container.innerHTML = `
+                        <button id="load-more-btn" onclick="loadMorePrompts()" 
+                                class="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition">
+                            Load More Prompts
+                        </button>
+                    `;
+                    
+                    const promptsSection = document.querySelector('#prompts');
+                    const promptsContainer = promptsSection.querySelector('.max-w-7xl');
+                    promptsContainer.appendChild(container);
+                } else {
+                    loadMoreContainer.style.display = 'block';
+                    if (loadMoreBtn) {
+                        loadMoreBtn.innerHTML = 'Load More Prompts';
+                        loadMoreBtn.disabled = false;
+                    }
+                }
+            } else {
+                if (loadMoreContainer) {
+                    loadMoreContainer.style.display = 'none';
+                }
+            }
+        }
+
+        // Infinite scroll functionality
+        function initInfiniteScroll() {
+            window.addEventListener('scroll', () => {
+                if (isLoading || !hasMorePages) return;
+
+                const scrollPosition = window.innerHeight + window.scrollY;
+                const documentHeight = document.documentElement.offsetHeight;
+                
+                // Load more when user is 200px from bottom
+                if (scrollPosition >= documentHeight - 200) {
+                    loadMorePrompts();
+                }
+            });
         }
 
         // Search functionality
@@ -426,6 +556,22 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             bindSearchFunctionality();
+            
+            // Initialize pagination state from server
+            const promptsGrid = document.querySelector('#prompts-grid');
+            if (promptsGrid && promptsGrid.children.length > 0) {
+                // Get initial pagination data from Laravel
+                @if(isset($prompts) && $prompts instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                    hasMorePages = {{ $prompts->hasMorePages() ? 'true' : 'false' }};
+                    nextPageUrl = '{{ $prompts->nextPageUrl() }}';
+                @endif
+                
+                // Show load more button if needed
+                showLoadMoreButton();
+                
+                // Initialize infinite scroll
+                initInfiniteScroll();
+            }
 
             // Bind filter button clicks
             document.querySelectorAll('.filter-btn').forEach(button => {
