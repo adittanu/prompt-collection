@@ -64,7 +64,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
-                        <input type="text" id="search-input" placeholder="{{ __('messages.prompts.search_placeholder') }}"
+                        <input type="text" id="search-input"
+                            placeholder="{{ __('messages.prompts.search_placeholder') }}"
                             class="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
                     </div>
                 </div>
@@ -104,7 +105,8 @@
                     </button>
                 </div>
 
-                <p class="text-gray-600 text-lg" id="showing-text">{{ __('messages.prompts.showing') }} {{ $prompts->count() }} {{ __('messages.prompts.of') }}
+                <p class="text-gray-600 text-lg" id="showing-text">{{ __('messages.prompts.showing') }}
+                    {{ $prompts->count() }} {{ __('messages.prompts.of') }}
                     {{ $stats['total_prompts'] ?? $prompts->count() }} {{ __('messages.prompts.prompts') }}</p>
             </div>
 

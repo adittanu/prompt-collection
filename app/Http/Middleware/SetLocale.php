@@ -17,7 +17,7 @@ class SetLocale
     {
         $locale = session('locale', 'id'); // Default to Indonesian
         app()->setLocale($locale);
-        
+
         return $next($request);
     }
 }
