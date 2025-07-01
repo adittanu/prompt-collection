@@ -115,15 +115,29 @@
                 @include('partials.prompt-cards', ['prompts' => $prompts])
             </div>
 
-            <!-- Load More Button -->
-            @if($prompts->hasMorePages())
-            <div class="text-center mt-12" id="load-more-container">
+            <!-- Infinite Scroll Status Indicator -->
+            <div class="text-center mt-12" id="scroll-status">
+                @if($prompts->hasMorePages())
+                    <div id="has-more-indicator" class="text-gray-500">
+                        <svg class="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                        <p class="text-sm">{{ __('messages.prompts.scroll_for_more') }}</p>
+                    </div>
+                @else
+                    <div id="no-more-indicator" class="text-gray-400">
+                        <p class="text-sm">{{ __('messages.prompts.no_more_prompts') }}</p>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Load More Button (Hidden by default, infinite scroll is used) -->
+            <div class="text-center mt-12" id="load-more-container" style="display: none;">
                 <button id="load-more-btn" onclick="loadMorePrompts()" 
                         class="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition">
                     {{ __('messages.prompts.load_more') }}
                 </button>
             </div>
-            @endif
         </div>
     </section>
 

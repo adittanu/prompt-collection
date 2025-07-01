@@ -31,6 +31,13 @@ return [
         'loading' => 'Memuat...',
         'error' => 'Terjadi kesalahan saat memuat prompt',
         'load_more' => 'Muat Lebih Banyak',
+        'search_results' => 'hasil pencarian',
+        'no_results' => 'Tidak ada prompt yang ditemukan',
+        'scroll_for_more' => 'Scroll ke bawah untuk melihat lebih banyak',
+        'no_more_prompts' => 'Semua prompt telah ditampilkan',
+        'or_click_here' => 'atau klik di sini',
+        'loaded' => 'Berhasil memuat',
+        'more_prompts' => 'prompt lagi',
     ],
     'about' => [
         'title' => 'Tentang Adit Tanu',

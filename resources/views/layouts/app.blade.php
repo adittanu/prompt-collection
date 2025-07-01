@@ -62,9 +62,12 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 1;
             }
+
             50% {
                 opacity: .5;
             }
@@ -75,10 +78,13 @@
         }
 
         @keyframes bounce {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(-25%);
                 animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
             }
+
             50% {
                 transform: none;
                 animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
@@ -235,7 +241,7 @@
             const button = event.target.closest('button');
             const originalHTML = button.innerHTML;
             const originalClasses = button.className;
-            
+
             // Add loading animation
             button.innerHTML = `
                 <svg class="w-4 h-4 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -244,7 +250,8 @@
                 {{ __('messages.prompts.copying') ?? 'Copying...' }}
             `;
             button.disabled = true;
-            button.className = 'inline-flex items-center px-3 py-1 border border-blue-300 rounded-md text-sm font-medium text-blue-700 bg-blue-50 transition cursor-not-allowed';
+            button.className =
+                'inline-flex items-center px-3 py-1 border border-blue-300 rounded-md text-sm font-medium text-blue-700 bg-blue-50 transition cursor-not-allowed';
 
             navigator.clipboard.writeText(text).then(function() {
                 // Success animation
@@ -254,13 +261,19 @@
                     </svg>
                     {{ __('messages.prompts.copied') }}
                 `;
-                button.className = 'inline-flex items-center px-3 py-1 border border-green-300 rounded-md text-sm font-medium text-green-700 bg-green-50 transition transform scale-105';
-                
+                button.className =
+                    'inline-flex items-center px-3 py-1 border border-green-300 rounded-md text-sm font-medium text-green-700 bg-green-50 transition transform scale-105';
+
                 // Add success pulse animation
-                button.animate([
-                    { transform: 'scale(1.05)' },
-                    { transform: 'scale(1.1)' },
-                    { transform: 'scale(1.05)' }
+                button.animate([{
+                        transform: 'scale(1.05)'
+                    },
+                    {
+                        transform: 'scale(1.1)'
+                    },
+                    {
+                        transform: 'scale(1.05)'
+                    }
                 ], {
                     duration: 200,
                     easing: 'ease-in-out'
@@ -275,7 +288,7 @@
                     button.innerHTML = originalHTML;
                     button.className = originalClasses;
                     button.disabled = false;
-                    
+
                     // Remove transition after animation
                     setTimeout(() => {
                         button.style.transition = '';
@@ -289,11 +302,12 @@
                     </svg>
                     {{ __('messages.prompts.copy_failed') ?? 'Failed' }}
                 `;
-                button.className = 'inline-flex items-center px-3 py-1 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-red-50 transition';
-                
+                button.className =
+                    'inline-flex items-center px-3 py-1 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-red-50 transition';
+
                 // Show error toast
                 showToast('{{ __('messages.prompts.copy_failed') ?? 'Copy failed' }}', 'error');
-                
+
                 setTimeout(() => {
                     button.innerHTML = originalHTML;
                     button.className = originalClasses;
@@ -314,10 +328,10 @@
             toast.className = `toast fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center space-x-2 transform translate-x-full transition-all duration-300 ${
                 type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
             }`;
-            
+
             toast.innerHTML = `
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    ${type === 'success' 
+                    ${type === 'success'
                         ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>'
                         : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>'
                     }
@@ -345,20 +359,23 @@
 
         // Filter functionality without page refresh
         let currentFilter = 'all';
+        let currentSearch = '';
         let isLoading = false;
         let hasMorePages = true;
         let nextPageUrl = null;
+        let currentPage = 1;
 
         function filterPrompts(type) {
             const filterButtons = document.querySelectorAll('.filter-btn');
             const promptsGrid = document.querySelector('#prompts-grid');
             const showingText = document.querySelector('#showing-text');
-            
+
             // Reset pagination state
             currentFilter = type;
             isLoading = false;
             hasMorePages = true;
             nextPageUrl = null;
+            currentPage = 1;
 
             // Update active button styling
             filterButtons.forEach(btn => {
@@ -374,12 +391,18 @@
 
             // Show loading state
             promptsGrid.innerHTML =
-                '<div class="col-span-full text-center py-8"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div><p class="mt-4 text-gray-600">Loading...</p></div>';
+                '<div class="col-span-full text-center py-8"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div><p class="mt-4 text-gray-600">{{ __('messages.prompts.loading') }}</p></div>';
+
+            // Prepare request data
+            const requestData = {};
+            if (currentSearch) {
+                requestData.search = currentSearch;
+            }
 
             // Fetch filtered data
             const url = type === 'all' ? '/' : `/prompts/${type}`;
 
-            fetch(url, {
+            fetch(url + '?' + new URLSearchParams(requestData), {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'Accept': 'application/json',
@@ -389,10 +412,11 @@
                 .then(data => {
                     // Update the prompts grid
                     promptsGrid.innerHTML = data.html;
-                    
+
                     // Update pagination state
                     hasMorePages = data.hasMorePages;
                     nextPageUrl = data.nextPageUrl;
+                    currentPage = data.currentPage;
 
                     // Update showing text
                     if (showingText) {
@@ -400,132 +424,249 @@
                             `{{ __('messages.prompts.showing') }} ${data.count} {{ __('messages.prompts.of') }} ${data.total} {{ __('messages.prompts.prompts') }}`;
                     }
 
-                    // Re-bind search functionality
-                    bindSearchFunctionality();
-                    
-                    // Show load more button if there are more pages
-                    showLoadMoreButton();
+                    // Remove load more button since we're using infinite scroll
+                    hideLoadMoreButton();
+
+                    // Update scroll status indicator
+                    updateScrollStatus();
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     promptsGrid.innerHTML =
-                        '<div class="col-span-full text-center py-8 text-red-600">Error loading prompts</div>';
+                        '<div class="col-span-full text-center py-8 text-red-600">{{ __('messages.prompts.error') }}</div>';
                 });
         }
 
         function loadMorePrompts() {
             if (isLoading || !hasMorePages || !nextPageUrl) return;
 
+            console.log('Loading more prompts...'); // Debug log
             isLoading = true;
-            const loadMoreBtn = document.querySelector('#load-more-btn');
+
+            // Update scroll status to show loading
+            updateScrollStatus();
+
             const promptsGrid = document.querySelector('#prompts-grid');
-            
-            if (loadMoreBtn) {
-                loadMoreBtn.innerHTML = `
-                    <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Loading...
-                `;
-                loadMoreBtn.disabled = true;
+
+            // Prepare request data
+            const requestData = {};
+            if (currentSearch) {
+                requestData.search = currentSearch;
             }
 
-            fetch(nextPageUrl, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Append new cards to existing grid
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = data.html;
-                
-                while (tempDiv.firstChild) {
-                    promptsGrid.appendChild(tempDiv.firstChild);
-                }
-                
-                // Update pagination state
-                hasMorePages = data.hasMorePages;
-                nextPageUrl = data.nextPageUrl;
-                
-                // Update showing text
-                const showingText = document.querySelector('#showing-text');
-                if (showingText) {
-                    const currentCount = promptsGrid.children.length;
-                    showingText.textContent = `{{ __('messages.prompts.showing') }} ${currentCount} {{ __('messages.prompts.of') }} ${data.total} {{ __('messages.prompts.prompts') }}`;
-                }
-                
-                // Re-bind search functionality
-                bindSearchFunctionality();
+            const urlWithParams = nextPageUrl + (nextPageUrl.includes('?') ? '&' : '?') + new URLSearchParams(requestData);
 
-                // Update load more button
-                showLoadMoreButton();
-                
-                isLoading = false;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                isLoading = false;
-                if (loadMoreBtn) {
-                    loadMoreBtn.innerHTML = 'Load More Prompts';
-                    loadMoreBtn.disabled = false;
-                }
-            });
-        }
-
-        function showLoadMoreButton() {
-            const loadMoreContainer = document.querySelector('#load-more-container');
-            const loadMoreBtn = document.querySelector('#load-more-btn');
-            
-            if (hasMorePages) {
-                if (!loadMoreContainer) {
-                    // Create load more button if it doesn't exist
-                    const container = document.createElement('div');
-                    container.id = 'load-more-container';
-                    container.className = 'text-center mt-12';
-                    container.innerHTML = `
-                        <button id="load-more-btn" onclick="loadMorePrompts()" 
-                                class="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition">
-                            Load More Prompts
-                        </button>
-                    `;
-                    
-                    const promptsSection = document.querySelector('#prompts');
-                    const promptsContainer = promptsSection.querySelector('.max-w-7xl');
-                    promptsContainer.appendChild(container);
-                } else {
-                    loadMoreContainer.style.display = 'block';
-                    if (loadMoreBtn) {
-                        loadMoreBtn.innerHTML = 'Load More Prompts';
-                        loadMoreBtn.disabled = false;
+            fetch(urlWithParams, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
                     }
-                }
-            } else {
-                if (loadMoreContainer) {
-                    loadMoreContainer.style.display = 'none';
-                }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Data loaded:', data); // Debug log
+
+                    // Check if we got a valid response
+                    if (!data || typeof data !== 'object') {
+                        throw new Error('Invalid response format');
+                    }
+
+                    let newCards = [];
+
+                    // Append new cards to existing grid
+                    if (data.html && data.html.trim()) {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = data.html;
+
+                        // Add each new card with a slight animation
+                        newCards = Array.from(tempDiv.children);
+                        newCards.forEach((card, index) => {
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(20px)';
+                            promptsGrid.appendChild(card);
+
+                            // Animate in with delay
+                            setTimeout(() => {
+                                card.style.transition = 'all 0.3s ease';
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, index * 100);
+                        });
+                    }
+
+                    // Update pagination state
+                    hasMorePages = data.hasMorePages || false;
+                    nextPageUrl = data.nextPageUrl || null;
+                    currentPage = data.currentPage || 1;
+
+                    // Update showing text
+                    const showingText = document.querySelector('#showing-text');
+                    if (showingText && data.total) {
+                        const currentCount = promptsGrid.children.length;
+                        showingText.textContent =
+                            `{{ __('messages.prompts.showing') }} ${currentCount} {{ __('messages.prompts.of') }} ${data.total} {{ __('messages.prompts.prompts') }}`;
+                    }
+
+                    // Show success toast only if we actually loaded new cards
+                    if (newCards.length > 0) {
+                        // showToast(`{{ __('messages.prompts.loaded') ?? 'Loaded' }} ${newCards.length} {{ __('messages.prompts.more_prompts') ?? 'more prompts' }}`, 'success');
+                    }
+
+                    // Update scroll status indicator
+                    isLoading = false;
+                    updateScrollStatus();
+
+                    console.log('Loading complete. Has more pages:', hasMorePages); // Debug log
+                })
+                .catch(error => {
+                    console.error('Error loading more prompts:', error);
+
+                    // Show more specific error toast
+                    const errorMessage = '{{ __('messages.prompts.error') ?? 'Error loading prompts' }}';
+                    showToast(errorMessage, 'error');
+
+                    isLoading = false;
+                    updateScrollStatus();
+                });
+        }
+
+        function hideLoadMoreButton() {
+            const loadMoreContainer = document.querySelector('#load-more-container');
+            if (loadMoreContainer) {
+                loadMoreContainer.style.display = 'none';
             }
         }
 
-        // Infinite scroll functionality
-        function initInfiniteScroll() {
-            window.addEventListener('scroll', () => {
-                if (isLoading || !hasMorePages) return;
+        function updateScrollStatus() {
+            const scrollStatus = document.querySelector('#scroll-status');
+            if (!scrollStatus) return;
 
-                const scrollPosition = window.innerHeight + window.scrollY;
-                const documentHeight = document.documentElement.offsetHeight;
-                
-                // Load more when user is 200px from bottom
-                if (scrollPosition >= documentHeight - 200) {
-                    loadMorePrompts();
-                }
+            if (isLoading) {
+                // Show loading state in scroll indicator
+                scrollStatus.innerHTML = `
+                    <div id="loading-indicator-status" class="text-blue-600">
+                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                        <p class="text-sm">{{ __('messages.prompts.loading') }}</p>
+                    </div>
+                `;
+            } else if (hasMorePages) {
+                scrollStatus.innerHTML = `
+                    <div id="has-more-indicator" class="text-gray-500 hover:text-gray-700 transition-colors cursor-pointer" onclick="loadMorePrompts()">
+                        <div class="animate-bounce">
+                            <svg class="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                            </svg>
+                        </div>
+                        <p class="text-sm">{{ __('messages.prompts.scroll_for_more') }}</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ __('messages.prompts.or_click_here') }}</p>
+                    </div>
+                `;
+            } else {
+                scrollStatus.innerHTML = `
+                    <div id="no-more-indicator" class="text-gray-400">
+                        <svg class="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <p class="text-sm">{{ __('messages.prompts.no_more_prompts') }}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Infinite scroll functionality - trigger when scroll indicator comes into view
+        function initInfiniteScroll() {
+            let scrollTimeout;
+
+            window.addEventListener('scroll', () => {
+                // Debounce scroll events for better performance
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    if (isLoading || !hasMorePages) return;
+
+                    // Get scroll indicator element
+                    const scrollStatus = document.querySelector('#scroll-status');
+                    if (!scrollStatus) return;
+
+                    // Check if scroll indicator is visible in viewport
+                    const rect = scrollStatus.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+
+                    // Trigger when scroll indicator is 300px from entering the viewport
+                    const isNearVisible = rect.top <= windowHeight + 300;
+
+                    if (isNearVisible) {
+                        console.log('Scroll indicator near visible, triggering load...'); // Debug log
+                        loadMorePrompts();
+                    }
+                }, 50); // Reduced debounce for more responsive feel
             });
         }
 
-        // Search functionality
+        // Enhanced search functionality with server-side search
+        function performSearch(searchTerm) {
+            currentSearch = searchTerm;
+
+            // Reset pagination for new search
+            isLoading = false;
+            hasMorePages = true;
+            nextPageUrl = null;
+            currentPage = 1;
+
+            const promptsGrid = document.querySelector('#prompts-grid');
+            const showingText = document.querySelector('#showing-text');
+
+            // Show loading state
+            promptsGrid.innerHTML =
+                '<div class="col-span-full text-center py-8"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div><p class="mt-4 text-gray-600">{{ __('messages.prompts.loading') }}</p></div>';
+
+            // Prepare request data
+            const requestData = {};
+            if (searchTerm) {
+                requestData.search = searchTerm;
+            }
+
+            // Determine URL based on current filter
+            const url = currentFilter === 'all' ? '/' : `/prompts/${currentFilter}`;
+
+            fetch(url + '?' + new URLSearchParams(requestData), {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the prompts grid
+                    promptsGrid.innerHTML = data.html;
+
+                    // Update pagination state
+                    hasMorePages = data.hasMorePages;
+                    nextPageUrl = data.nextPageUrl;
+                    currentPage = data.currentPage;
+
+                    // Update showing text
+                    if (showingText) {
+                        const searchInfo = searchTerm ?
+                            ` ({{ __('messages.prompts.search_results') }}: "${searchTerm}")` : '';
+                        showingText.textContent =
+                            `{{ __('messages.prompts.showing') }} ${data.count} {{ __('messages.prompts.of') }} ${data.total} {{ __('messages.prompts.prompts') }}${searchInfo}`;
+                    }
+
+                    // Update scroll status indicator
+                    updateScrollStatus();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    promptsGrid.innerHTML =
+                        '<div class="col-span-full text-center py-8 text-red-600">{{ __('messages.prompts.error') }}</div>';
+                });
+        }
+
         function bindSearchFunctionality() {
             const searchInput = document.querySelector('#search-input');
             if (searchInput) {
@@ -533,44 +674,43 @@
                 const newSearchInput = searchInput.cloneNode(true);
                 searchInput.parentNode.replaceChild(newSearchInput, searchInput);
 
+                let searchTimeout;
                 newSearchInput.addEventListener('input', function(e) {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const cards = document.querySelectorAll('.card-hover');
+                    const searchTerm = e.target.value.trim();
 
-                    cards.forEach(card => {
-                        const title = card.querySelector('h3').textContent.toLowerCase();
-                        const content = card.querySelector('.text-gray-600').textContent.toLowerCase();
-                        const tags = Array.from(card.querySelectorAll('.bg-gray-100')).map(tag =>
-                            tag.textContent.toLowerCase()).join(' ');
-
-                        if (title.includes(searchTerm) || content.includes(searchTerm) || tags.includes(
-                                searchTerm)) {
-                            card.style.display = 'block';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
+                    // Debounce search requests
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        performSearch(searchTerm);
+                    }, 500); // Wait 500ms after user stops typing
                 });
             }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
             bindSearchFunctionality();
-            
+
             // Initialize pagination state from server
             const promptsGrid = document.querySelector('#prompts-grid');
             if (promptsGrid && promptsGrid.children.length > 0) {
                 // Get initial pagination data from Laravel
-                @if(isset($prompts) && $prompts instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                @if (isset($prompts) && $prompts instanceof \Illuminate\Pagination\LengthAwarePaginator)
                     hasMorePages = {{ $prompts->hasMorePages() ? 'true' : 'false' }};
                     nextPageUrl = '{{ $prompts->nextPageUrl() }}';
+                    currentPage = {{ $prompts->currentPage() }};
                 @endif
-                
-                // Show load more button if needed
-                showLoadMoreButton();
-                
+
+                // Hide load more button since we're using infinite scroll
+                hideLoadMoreButton();
+
                 // Initialize infinite scroll
                 initInfiniteScroll();
+
+                // Update scroll status indicator
+                updateScrollStatus();
+
+                // Add scroll to top button for better UX
+                addScrollToTopButton();
             }
 
             // Bind filter button clicks
@@ -582,6 +722,39 @@
                 });
             });
         });
+
+        // Add a smooth scroll to top button for better UX when there's a lot of content
+        function addScrollToTopButton() {
+            const scrollBtn = document.createElement('button');
+            scrollBtn.id = 'scroll-to-top';
+            scrollBtn.className =
+                'fixed bottom-6 right-6 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 opacity-0 pointer-events-none z-50';
+            scrollBtn.innerHTML = `
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                </svg>
+            `;
+
+            scrollBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            document.body.appendChild(scrollBtn);
+
+            // Show/hide scroll to top button based on scroll position
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 500) {
+                    scrollBtn.style.opacity = '1';
+                    scrollBtn.style.pointerEvents = 'auto';
+                } else {
+                    scrollBtn.style.opacity = '0';
+                    scrollBtn.style.pointerEvents = 'none';
+                }
+            });
+        }
     </script>
 </body>
 

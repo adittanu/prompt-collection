@@ -31,6 +31,13 @@ return [
         'loading' => 'Loading...',
         'error' => 'Error loading prompts',
         'load_more' => 'Load More Prompts',
+        'search_results' => 'search results',
+        'no_results' => 'No prompts found',
+        'scroll_for_more' => 'Scroll down to see more',
+        'no_more_prompts' => 'All prompts have been displayed',
+        'or_click_here' => 'or click here',
+        'loaded' => 'Loaded',
+        'more_prompts' => 'more prompts',
     ],
     'about' => [
         'title' => 'About Adit Tanu',

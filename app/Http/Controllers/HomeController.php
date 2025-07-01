@@ -11,7 +11,20 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $perPage = 12; // Show 12 prompts per page
-        $prompts = Prompt::with('category')->latest()->paginate($perPage);
+        $query = Prompt::with('category')->latest();
+        
+        // Add search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('title', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('prompt', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('result', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('tags', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+        
+        $prompts = $query->paginate($perPage);
         $categories = Category::all();
         $stats = [
             'total_prompts' => Prompt::count(),
@@ -27,9 +40,10 @@ class HomeController extends Controller
             return response()->json([
                 'html' => $html,
                 'count' => $prompts->count(),
-                'total' => $stats['total_prompts'],
+                'total' => $prompts->total(),
                 'hasMorePages' => $prompts->hasMorePages(),
-                'nextPageUrl' => $prompts->nextPageUrl()
+                'nextPageUrl' => $prompts->nextPageUrl(),
+                'currentPage' => $prompts->currentPage()
             ]);
         }
 
@@ -39,10 +53,22 @@ class HomeController extends Controller
     public function filterByType($type, Request $request)
     {
         $perPage = 12; // Show 12 prompts per page
-        $prompts = Prompt::with('category')
+        $query = Prompt::with('category')
             ->where('content_type', $type)
-            ->latest()
-            ->paginate($perPage);
+            ->latest();
+            
+        // Add search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('title', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('prompt', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('result', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('tags', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+        
+        $prompts = $query->paginate($perPage);
         $categories = Category::all();
 
         $stats = [
@@ -59,9 +85,10 @@ class HomeController extends Controller
             return response()->json([
                 'html' => $html,
                 'count' => $prompts->count(),
-                'total' => $stats['total_prompts'],
+                'total' => $prompts->total(),
                 'hasMorePages' => $prompts->hasMorePages(),
-                'nextPageUrl' => $prompts->nextPageUrl()
+                'nextPageUrl' => $prompts->nextPageUrl(),
+                'currentPage' => $prompts->currentPage()
             ]);
         }
 
