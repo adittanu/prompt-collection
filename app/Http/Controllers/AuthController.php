@@ -37,7 +37,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            
+
             return redirect()->intended(route('home'))->with('success', __('messages.auth.login_success'));
         }
 

@@ -12,7 +12,7 @@ class HomeController extends Controller
     {
         $perPage = 12; // Show 12 prompts per page
         $query = Prompt::with('category')->latest();
-        
+
         // Add search functionality
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
@@ -23,7 +23,7 @@ class HomeController extends Controller
                   ->orWhere('tags', 'LIKE', "%{$searchTerm}%");
             });
         }
-        
+
         $prompts = $query->paginate($perPage);
         $categories = Category::all();
         $stats = [
@@ -56,7 +56,7 @@ class HomeController extends Controller
         $query = Prompt::with('category')
             ->where('content_type', $type)
             ->latest();
-            
+
         // Add search functionality
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
@@ -67,7 +67,7 @@ class HomeController extends Controller
                   ->orWhere('tags', 'LIKE', "%{$searchTerm}%");
             });
         }
-        
+
         $prompts = $query->paginate($perPage);
         $categories = Category::all();
 

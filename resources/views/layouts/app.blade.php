@@ -244,7 +244,7 @@
                 font-size: 2.5rem !important;
                 line-height: 1.2 !important;
             }
-            
+
             .hero-description {
                 font-size: 1rem !important;
             }
@@ -273,7 +273,7 @@
                     </a>
                     <span class="ml-2 text-sm text-gray-500 hidden sm:inline">by Adit Tanu</span>
                 </div>
-                
+
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="{{ route('home') }}"
@@ -287,25 +287,33 @@
                         <!-- User Menu -->
                         <div class="relative group">
                             <button class="flex items-center text-gray-700 hover:text-gray-900 font-medium">
-                                @if(auth()->user()->avatar)
-                                    <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="w-6 h-6 rounded-full mr-2">
+                                @if (auth()->user()->avatar)
+                                    <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}"
+                                        class="w-6 h-6 rounded-full mr-2">
                                 @else
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                     </svg>
                                 @endif
                                 {{ auth()->user()->name }}
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
-                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div
+                                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                 <div class="py-1">
                                     <form action="{{ route('logout') }}" method="POST" class="block">
                                         @csrf
-                                        <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                        <button type="submit"
+                                            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                                </path>
                                             </svg>
                                             {{ __('messages.nav.logout') }}
                                         </button>
@@ -315,8 +323,10 @@
                         </div>
                     @else
                         <!-- Login/Register Links -->
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.login') }}</a>
-                        <a href="{{ route('register') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition">{{ __('messages.nav.register') }}</a>
+                        <a href="{{ route('login') }}"
+                            class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.login') }}</a>
+                        <a href="{{ route('register') }}"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition">{{ __('messages.nav.register') }}</a>
                     @endauth
 
                     <!-- Language Switcher -->
@@ -339,7 +349,8 @@
                                 <a href="{{ route('language.switch', 'id') }}"
                                     class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'id' ? 'bg-blue-50 text-blue-700' : '' }}">
                                     <!-- Indonesian Flag: Red on top, White on bottom -->
-                                    <span class="w-6 h-4 mr-2 relative rounded-sm overflow-hidden border border-gray-200">
+                                    <span
+                                        class="w-6 h-4 mr-2 relative rounded-sm overflow-hidden border border-gray-200">
                                         <span class="absolute top-0 left-0 w-full h-2 bg-red-500"></span>
                                         <span class="absolute bottom-0 left-0 w-full h-2 bg-white"></span>
                                     </span>
@@ -348,15 +359,19 @@
                                 <a href="{{ route('language.switch', 'en') }}"
                                     class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'en' ? 'bg-blue-50 text-blue-700' : '' }}">
                                     <!-- UK Flag: Simplified Union Jack -->
-                                    <span class="w-6 h-4 mr-2 relative rounded-sm overflow-hidden border border-gray-200 bg-blue-600">
+                                    <span
+                                        class="w-6 h-4 mr-2 relative rounded-sm overflow-hidden border border-gray-200 bg-blue-600">
                                         <!-- Blue background -->
                                         <span class="absolute inset-0 bg-blue-600"></span>
                                         <!-- White diagonal crosses -->
-                                        <span class="absolute inset-0" style="background: linear-gradient(45deg, transparent 45%, white 45%, white 55%, transparent 55%), linear-gradient(-45deg, transparent 45%, white 45%, white 55%, transparent 55%)"></span>
+                                        <span class="absolute inset-0"
+                                            style="background: linear-gradient(45deg, transparent 45%, white 45%, white 55%, transparent 55%), linear-gradient(-45deg, transparent 45%, white 45%, white 55%, transparent 55%)"></span>
                                         <!-- Red cross vertical -->
-                                        <span class="absolute left-1/2 top-0 w-0.5 h-full bg-red-500 transform -translate-x-1/2"></span>
+                                        <span
+                                            class="absolute left-1/2 top-0 w-0.5 h-full bg-red-500 transform -translate-x-1/2"></span>
                                         <!-- Red cross horizontal -->
-                                        <span class="absolute top-1/2 left-0 w-full h-0.5 bg-red-500 transform -translate-y-1/2"></span>
+                                        <span
+                                            class="absolute top-1/2 left-0 w-full h-0.5 bg-red-500 transform -translate-y-1/2"></span>
                                     </span>
                                     English
                                 </a>
@@ -367,7 +382,7 @@
 
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-button" type="button" 
+                    <button id="mobile-menu-button" type="button"
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
                         aria-controls="mobile-menu" aria-expanded="false">
                         <span class="sr-only">{{ __('messages.nav.open_menu') }}</span>
@@ -391,8 +406,11 @@
                 <a href="{{ route('home') }}"
                     class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
                     <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                            </path>
                         </svg>
                         {{ __('messages.nav.home') }}
                     </div>
@@ -400,8 +418,11 @@
                 <a href="{{ route('home') }}#prompts"
                     class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
                     <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                            </path>
                         </svg>
                         {{ __('messages.nav.prompts') }}
                     </div>
@@ -409,32 +430,41 @@
                 <a href="{{ route('home') }}#about"
                     class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
                     <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         {{ __('messages.nav.about') }}
                     </div>
                 </a>
-                
+
                 @auth
                     <!-- User Menu for Mobile -->
                     <div class="border-t border-gray-100 mt-2 pt-2">
                         <div class="px-4 py-3 text-sm font-medium text-gray-500 flex items-center">
-                            @if(auth()->user()->avatar)
-                                <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="w-6 h-6 rounded-full mr-2">
+                            @if (auth()->user()->avatar)
+                                <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}"
+                                    class="w-6 h-6 rounded-full mr-2">
                             @else
-                                <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                 </svg>
                             @endif
                             {{ auth()->user()->name }}
                         </div>
                         <form action="{{ route('logout') }}" method="POST" class="block">
                             @csrf
-                            <button type="submit" class="w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                            <button type="submit"
+                                class="w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
                                 <div class="flex items-center">
-                                    <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                        </path>
                                     </svg>
                                     {{ __('messages.nav.logout') }}
                                 </div>
@@ -447,8 +477,11 @@
                         <a href="{{ route('login') }}"
                             class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
                             <div class="flex items-center">
-                                <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+                                    </path>
                                 </svg>
                                 {{ __('messages.nav.login') }}
                             </div>
@@ -456,20 +489,25 @@
                         <a href="{{ route('register') }}"
                             class="block px-4 py-3 rounded-lg text-base font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-200 relative z-50">
                             <div class="flex items-center">
-                                <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                                <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+                                    </path>
                                 </svg>
                                 {{ __('messages.nav.register') }}
                             </div>
                         </a>
                     </div>
                 @endauth
-                
+
                 <!-- Mobile Language Switcher -->
                 <div class="px-4 py-3 border-t border-gray-100 mt-2 relative z-50">
                     <div class="text-sm font-medium text-gray-500 mb-3 flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129">
+                            </path>
                         </svg>
                         {{ __('messages.nav.language') }}
                     </div>
@@ -477,34 +515,43 @@
                         <a href="{{ route('language.switch', 'id') }}"
                             class="language-option flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200 relative z-50 {{ app()->getLocale() == 'id' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' : '' }}">
                             <!-- Indonesian Flag: Red on top, White on bottom -->
-                            <span class="flag-icon w-6 h-4 mr-3 relative rounded-sm overflow-hidden border border-gray-200">
+                            <span
+                                class="flag-icon w-6 h-4 mr-3 relative rounded-sm overflow-hidden border border-gray-200">
                                 <span class="absolute top-0 left-0 w-full h-2 bg-red-500"></span>
                                 <span class="absolute bottom-0 left-0 w-full h-2 bg-white"></span>
                             </span>
                             <span class="font-medium">Indonesia</span>
-                            @if(app()->getLocale() == 'id')
+                            @if (app()->getLocale() == 'id')
                                 <svg class="w-4 h-4 ml-auto text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    <path fill-rule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clip-rule="evenodd"></path>
                                 </svg>
                             @endif
                         </a>
                         <a href="{{ route('language.switch', 'en') }}"
                             class="language-option flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200 relative z-50 {{ app()->getLocale() == 'en' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' : '' }}">
                             <!-- UK Flag: Simplified Union Jack -->
-                            <span class="flag-icon w-6 h-4 mr-3 relative rounded-sm overflow-hidden border border-gray-200 bg-blue-600">
+                            <span
+                                class="flag-icon w-6 h-4 mr-3 relative rounded-sm overflow-hidden border border-gray-200 bg-blue-600">
                                 <!-- Blue background -->
                                 <span class="absolute inset-0 bg-blue-600"></span>
                                 <!-- White diagonal crosses -->
-                                <span class="absolute inset-0" style="background: linear-gradient(45deg, transparent 45%, white 45%, white 55%, transparent 55%), linear-gradient(-45deg, transparent 45%, white 45%, white 55%, transparent 55%)"></span>
+                                <span class="absolute inset-0"
+                                    style="background: linear-gradient(45deg, transparent 45%, white 45%, white 55%, transparent 55%), linear-gradient(-45deg, transparent 45%, white 45%, white 55%, transparent 55%)"></span>
                                 <!-- Red cross vertical -->
-                                <span class="absolute left-1/2 top-0 w-0.5 h-full bg-red-500 transform -translate-x-1/2"></span>
+                                <span
+                                    class="absolute left-1/2 top-0 w-0.5 h-full bg-red-500 transform -translate-x-1/2"></span>
                                 <!-- Red cross horizontal -->
-                                <span class="absolute top-1/2 left-0 w-full h-0.5 bg-red-500 transform -translate-y-1/2"></span>
+                                <span
+                                    class="absolute top-1/2 left-0 w-full h-0.5 bg-red-500 transform -translate-y-1/2"></span>
                             </span>
                             <span class="font-medium">English</span>
-                            @if(app()->getLocale() == 'en')
+                            @if (app()->getLocale() == 'en')
                                 <svg class="w-4 h-4 ml-auto text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    <path fill-rule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clip-rule="evenodd"></path>
                                 </svg>
                             @endif
                         </a>
@@ -1059,9 +1106,9 @@
                 mobileMenuButton.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    
+
                     const isOpen = mobileMenu.classList.contains('show');
-                    
+
                     if (isOpen) {
                         // Close menu
                         closeMobileMenu();
@@ -1084,7 +1131,7 @@
                     link.addEventListener('click', function(e) {
                         // Allow the link to work normally, just close the menu after a brief delay
                         console.log('Mobile menu link clicked:', this.href); // Debug log
-                        
+
                         // Don't prevent default - let the link work normally
                         // Just close the menu with a slight delay for better UX
                         setTimeout(() => {
@@ -1110,7 +1157,7 @@
                     hamburgerIcon.classList.add('active');
                 }
                 mobileMenuButton.setAttribute('aria-expanded', 'true');
-                
+
                 // Don't prevent body scroll - allow users to scroll while menu is open
                 // This improves UX especially on mobile devices
             }
@@ -1124,7 +1171,7 @@
                     hamburgerIcon.classList.remove('active');
                 }
                 mobileMenuButton.setAttribute('aria-expanded', 'false');
-                
+
                 // Restore body scroll (in case it was disabled)
                 document.body.style.overflow = '';
             }

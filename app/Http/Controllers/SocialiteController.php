@@ -19,10 +19,10 @@ class SocialiteController extends Controller
     {
         try {
             $socialUser = Socialite::driver($provider)->user();
-            
+
             // Check if user already exists
             $user = User::where('email', $socialUser->getEmail())->first();
-            
+
             if ($user) {
                 // Update user with social provider info if not already set
                 if (!$user->provider) {
@@ -47,7 +47,7 @@ class SocialiteController extends Controller
             Auth::login($user);
 
             return redirect()->route('home')->with('success', __('messages.auth.social_login_success'));
-            
+
         } catch (\Exception $e) {
             return redirect()->route('login')->with('error', __('messages.auth.social_login_failed'));
         }

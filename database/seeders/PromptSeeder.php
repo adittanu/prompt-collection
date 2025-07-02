@@ -128,7 +128,7 @@ class PromptSeeder extends Seeder
 
         // Generate 100 prompts
         $generatedPrompts = [];
-        
+
         // Add base prompts first
         foreach ($basePrompts as $prompt) {
             $generatedPrompts[] = $prompt;
