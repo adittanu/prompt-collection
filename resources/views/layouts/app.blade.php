@@ -283,6 +283,42 @@
                     <a href="{{ route('home') }}#about"
                         class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.about') }}</a>
 
+                    @auth
+                        <!-- User Menu -->
+                        <div class="relative group">
+                            <button class="flex items-center text-gray-700 hover:text-gray-900 font-medium">
+                                @if(auth()->user()->avatar)
+                                    <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="w-6 h-6 rounded-full mr-2">
+                                @else
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                @endif
+                                {{ auth()->user()->name }}
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                <div class="py-1">
+                                    <form action="{{ route('logout') }}" method="POST" class="block">
+                                        @csrf
+                                        <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                            </svg>
+                                            {{ __('messages.nav.logout') }}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <!-- Login/Register Links -->
+                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.login') }}</a>
+                        <a href="{{ route('register') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition">{{ __('messages.nav.register') }}</a>
+                    @endauth
+
                     <!-- Language Switcher -->
                     <div class="relative group">
                         <button class="flex items-center text-gray-700 hover:text-gray-900 font-medium">
@@ -379,6 +415,55 @@
                         {{ __('messages.nav.about') }}
                     </div>
                 </a>
+                
+                @auth
+                    <!-- User Menu for Mobile -->
+                    <div class="border-t border-gray-100 mt-2 pt-2">
+                        <div class="px-4 py-3 text-sm font-medium text-gray-500 flex items-center">
+                            @if(auth()->user()->avatar)
+                                <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="w-6 h-6 rounded-full mr-2">
+                            @else
+                                <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            @endif
+                            {{ auth()->user()->name }}
+                        </div>
+                        <form action="{{ route('logout') }}" method="POST" class="block">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    </svg>
+                                    {{ __('messages.nav.logout') }}
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <!-- Login/Register for Mobile -->
+                    <div class="border-t border-gray-100 mt-2 pt-2">
+                        <a href="{{ route('login') }}"
+                            class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                </svg>
+                                {{ __('messages.nav.login') }}
+                            </div>
+                        </a>
+                        <a href="{{ route('register') }}"
+                            class="block px-4 py-3 rounded-lg text-base font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                                </svg>
+                                {{ __('messages.nav.register') }}
+                            </div>
+                        </a>
+                    </div>
+                @endauth
                 
                 <!-- Mobile Language Switcher -->
                 <div class="px-4 py-3 border-t border-gray-100 mt-2 relative z-50">
