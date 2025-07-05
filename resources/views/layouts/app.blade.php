@@ -10,8 +10,73 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Configure Tailwind for dark mode -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
+
+    <!-- Theme Script - Must be in head to prevent flash -->
+    <script>
+        // Force light mode temporarily
+        document.documentElement.classList.remove('dark');
+
+        // Theme initialization script
+        (function() {
+            function getThemePreference() {
+                if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+                    return localStorage.getItem('theme');
+                }
+                return 'light'; // Default to light mode
+            }
+
+            function setTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else if (theme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                } else if (theme === 'system') {
+                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+                localStorage.setItem('theme', theme);
+            }
+
+            // Set initial theme - force light mode as default
+            const theme = getThemePreference();
+            if (!localStorage.getItem('theme')) {
+                setTheme('light'); // Force light mode if no preference
+            } else {
+                setTheme(theme);
+            }
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                const currentTheme = localStorage.getItem('theme');
+                if (currentTheme === 'system') {
+                    setTheme('system');
+                }
+            });
+        })();
+    </script>
     <!-- Custom CSS for animations and effects -->
     <style>
+        /* Base styles */
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
@@ -25,6 +90,16 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             border-color: #d1d5db;
+        }
+
+        /* Dark mode card hover */
+        .dark .card-hover {
+            border-color: #374151;
+        }
+
+        .dark .card-hover:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: #4b5563;
         }
 
         .copy-btn {
@@ -62,12 +137,9 @@
         }
 
         @keyframes pulse {
-
-            0%,
-            100% {
+            0%, 100% {
                 opacity: 1;
             }
-
             50% {
                 opacity: .5;
             }
@@ -78,13 +150,10 @@
         }
 
         @keyframes bounce {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(-25%);
                 animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
             }
-
             50% {
                 transform: none;
                 animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
@@ -162,7 +231,7 @@
         }
 
         /* Ensure mobile menu links are clickable */
-        .mobile-menu a {
+        .mobile-menu a, .mobile-menu button {
             position: relative;
             overflow: hidden;
             z-index: 51;
@@ -197,15 +266,7 @@
         }
 
         /* Mobile menu item hover effects */
-        .mobile-menu a {
-            position: relative;
-            overflow: hidden;
-            z-index: 51;
-            display: block;
-            cursor: pointer;
-        }
-
-        .mobile-menu a::before {
+        .mobile-menu a::before, .mobile-menu button::before {
             content: '';
             position: absolute;
             top: 0;
@@ -217,7 +278,7 @@
             z-index: -1;
         }
 
-        .mobile-menu a:hover::before {
+        .mobile-menu a:hover::before, .mobile-menu button:hover::before {
             left: 100%;
         }
 
@@ -259,34 +320,64 @@
                 padding: 0.75rem 2.5rem 0.75rem 2.5rem !important;
             }
         }
+
+        /* Dark mode specific styles */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                color-scheme: dark;
+            }
+        }
+
+        /* Custom scrollbar for dark mode */
+        .dark ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .dark ::-webkit-scrollbar-track {
+            background: #374151;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #6b7280;
+            border-radius: 4px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        /* Toast styles for dark mode */
+        .dark .toast {
+            border: 1px solid #374151;
+        }
     </style>
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
     <!-- Navigation -->
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="text-xl font-bold text-gray-900">
+                    <a href="{{ route('home') }}" class="text-xl font-bold text-gray-900 dark:text-white">
                         Prompt Collection
                     </a>
-                    <span class="ml-2 text-sm text-gray-500 hidden sm:inline">by Adit Tanu</span>
+                    <span class="ml-2 text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">by Adit Tanu</span>
                 </div>
 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="{{ route('home') }}"
-                        class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.home') }}</a>
+                        class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">{{ __('messages.nav.home') }}</a>
                     <a href="{{ route('home') }}#prompts"
-                        class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.prompts') }}</a>
+                        class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">{{ __('messages.nav.prompts') }}</a>
                     <a href="{{ route('home') }}#about"
-                        class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.about') }}</a>
+                        class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">{{ __('messages.nav.about') }}</a>
 
                     @auth
                         <!-- User Menu -->
                         <div class="relative group">
-                            <button class="flex items-center text-gray-700 hover:text-gray-900 font-medium">
+                            <button class="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
                                 @if (auth()->user()->avatar)
                                     <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}"
                                         class="w-6 h-6 rounded-full mr-2">
@@ -303,12 +394,12 @@
                                 </svg>
                             </button>
                             <div
-                                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                 <div class="py-1">
                                     <form action="{{ route('logout') }}" method="POST" class="block">
                                         @csrf
                                         <button type="submit"
-                                            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -324,14 +415,59 @@
                     @else
                         <!-- Login/Register Links -->
                         <a href="{{ route('login') }}"
-                            class="text-gray-700 hover:text-gray-900 font-medium">{{ __('messages.nav.login') }}</a>
+                            class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">{{ __('messages.nav.login') }}</a>
                         <a href="{{ route('register') }}"
                             class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition">{{ __('messages.nav.register') }}</a>
                     @endauth
 
+                    <!-- Theme Switcher -->
+                    <div class="relative group">
+                        <button id="theme-switcher" class="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <!-- Sun icon (for light mode) -->
+                            <svg id="theme-icon-light" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            <!-- Moon icon (for dark mode) -->
+                            <svg id="theme-icon-dark" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                            </svg>
+                            <!-- System icon -->
+                            <svg id="theme-icon-system" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="theme-dropdown"
+                            class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="py-1">
+                                <button onclick="setTheme('light')" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                    </svg>
+                                    Light
+                                </button>
+                                <button onclick="setTheme('dark')" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                                    </svg>
+                                    Dark
+                                </button>
+                                <button onclick="setTheme('system')" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    System
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Language Switcher -->
                     <div class="relative group">
-                        <button class="flex items-center text-gray-700 hover:text-gray-900 font-medium">
+                        <button class="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129">
@@ -344,23 +480,23 @@
                             </svg>
                         </button>
                         <div
-                            class="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            class="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                             <div class="py-1">
                                 <a href="{{ route('language.switch', 'id') }}"
-                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'id' ? 'bg-blue-50 text-blue-700' : '' }}">
+                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ app()->getLocale() == 'id' ? 'bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300' : '' }}">
                                     <!-- Indonesian Flag: Red on top, White on bottom -->
                                     <span
-                                        class="w-6 h-4 mr-2 relative rounded-sm overflow-hidden border border-gray-200">
+                                        class="w-6 h-4 mr-2 relative rounded-sm overflow-hidden border border-gray-200 dark:border-gray-600">
                                         <span class="absolute top-0 left-0 w-full h-2 bg-red-500"></span>
                                         <span class="absolute bottom-0 left-0 w-full h-2 bg-white"></span>
                                     </span>
                                     Indonesia
                                 </a>
                                 <a href="{{ route('language.switch', 'en') }}"
-                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'en' ? 'bg-blue-50 text-blue-700' : '' }}">
+                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors {{ app()->getLocale() == 'en' ? 'bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300' : '' }}">
                                     <!-- UK Flag: Simplified Union Jack -->
                                     <span
-                                        class="w-6 h-4 mr-2 relative rounded-sm overflow-hidden border border-gray-200 bg-blue-600">
+                                        class="w-6 h-4 mr-2 relative rounded-sm overflow-hidden border border-gray-200 dark:border-gray-600 bg-blue-600">
                                         <!-- Blue background -->
                                         <span class="absolute inset-0 bg-blue-600"></span>
                                         <!-- White diagonal crosses -->
@@ -381,9 +517,21 @@
                 </div>
 
                 <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
+                <div class="md:hidden flex items-center space-x-2">
+                    <!-- Mobile Theme Switcher -->
+                    <button id="mobile-theme-switcher" class="p-2 text-gray-400 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
+                        <!-- Sun icon (for light mode) -->
+                        <svg id="mobile-theme-icon-light" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <!-- Moon icon (for dark mode) -->
+                        <svg id="mobile-theme-icon-dark" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+
                     <button id="mobile-menu-button" type="button"
-                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
+                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
                         aria-controls="mobile-menu" aria-expanded="false">
                         <span class="sr-only">{{ __('messages.nav.open_menu') }}</span>
                         <!-- Animated hamburger icon -->
@@ -402,11 +550,11 @@
 
         <!-- Mobile menu -->
         <div id="mobile-menu" class="mobile-menu md:hidden">
-            <div class="px-4 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200 shadow-lg relative z-50">
+            <div class="px-4 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg relative z-50 transition-colors duration-300">
                 <a href="{{ route('home') }}"
-                    class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                    class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200 relative z-50">
                     <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
+                        <svg class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
@@ -416,9 +564,9 @@
                     </div>
                 </a>
                 <a href="{{ route('home') }}#prompts"
-                    class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                    class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200 relative z-50">
                     <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
+                        <svg class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
@@ -428,9 +576,9 @@
                     </div>
                 </a>
                 <a href="{{ route('home') }}#about"
-                    class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                    class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200 relative z-50">
                     <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
+                        <svg class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -441,13 +589,13 @@
 
                 @auth
                     <!-- User Menu for Mobile -->
-                    <div class="border-t border-gray-100 mt-2 pt-2">
-                        <div class="px-4 py-3 text-sm font-medium text-gray-500 flex items-center">
+                    <div class="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
+                        <div class="px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center">
                             @if (auth()->user()->avatar)
                                 <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}"
                                     class="w-6 h-6 rounded-full mr-2">
                             @else
-                                <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor"
+                                <svg class="w-5 h-5 mr-2 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -458,9 +606,9 @@
                         <form action="{{ route('logout') }}" method="POST" class="block">
                             @csrf
                             <button type="submit"
-                                class="w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                                class="w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200 relative z-50">
                                 <div class="flex items-center">
-                                    <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
+                                    <svg class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
@@ -473,11 +621,11 @@
                     </div>
                 @else
                     <!-- Login/Register for Mobile -->
-                    <div class="border-t border-gray-100 mt-2 pt-2">
+                    <div class="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
                         <a href="{{ route('login') }}"
-                            class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                            class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200 relative z-50">
                             <div class="flex items-center">
-                                <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
+                                <svg class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
@@ -487,7 +635,7 @@
                             </div>
                         </a>
                         <a href="{{ route('register') }}"
-                            class="block px-4 py-3 rounded-lg text-base font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-200 relative z-50">
+                            class="block px-4 py-3 rounded-lg text-base font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-200 relative z-50">
                             <div class="flex items-center">
                                 <svg class="w-5 h-5 mr-3 text-blue-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -501,9 +649,39 @@
                     </div>
                 @endauth
 
+                <!-- Mobile Theme Switcher -->
+                <div class="px-4 py-3 border-t border-gray-100 dark:border-gray-700 mt-2 relative z-50">
+                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                        Theme
+                    </div>
+                    <div class="space-y-2">
+                        <button onclick="setTheme('light')" class="theme-option flex items-center w-full px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 relative z-50">
+                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            <span class="font-medium">Light</span>
+                        </button>
+                        <button onclick="setTheme('dark')" class="theme-option flex items-center w-full px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 relative z-50">
+                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                            </svg>
+                            <span class="font-medium">Dark</span>
+                        </button>
+                        <button onclick="setTheme('system')" class="theme-option flex items-center w-full px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 relative z-50">
+                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <span class="font-medium">System</span>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Mobile Language Switcher -->
-                <div class="px-4 py-3 border-t border-gray-100 mt-2 relative z-50">
-                    <div class="text-sm font-medium text-gray-500 mb-3 flex items-center">
+                <div class="px-4 py-3 border-t border-gray-100 dark:border-gray-700 mt-2 relative z-50">
+                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129">
@@ -513,16 +691,16 @@
                     </div>
                     <div class="space-y-2">
                         <a href="{{ route('language.switch', 'id') }}"
-                            class="language-option flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200 relative z-50 {{ app()->getLocale() == 'id' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' : '' }}">
+                            class="language-option flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 relative z-50 {{ app()->getLocale() == 'id' ? 'bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 ring-1 ring-blue-200 dark:ring-blue-800' : '' }}">
                             <!-- Indonesian Flag: Red on top, White on bottom -->
                             <span
-                                class="flag-icon w-6 h-4 mr-3 relative rounded-sm overflow-hidden border border-gray-200">
+                                class="flag-icon w-6 h-4 mr-3 relative rounded-sm overflow-hidden border border-gray-200 dark:border-gray-600">
                                 <span class="absolute top-0 left-0 w-full h-2 bg-red-500"></span>
                                 <span class="absolute bottom-0 left-0 w-full h-2 bg-white"></span>
                             </span>
                             <span class="font-medium">Indonesia</span>
                             @if (app()->getLocale() == 'id')
-                                <svg class="w-4 h-4 ml-auto text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-4 h-4 ml-auto text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                                         clip-rule="evenodd"></path>
@@ -530,10 +708,10 @@
                             @endif
                         </a>
                         <a href="{{ route('language.switch', 'en') }}"
-                            class="language-option flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200 relative z-50 {{ app()->getLocale() == 'en' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-200' : '' }}">
+                            class="language-option flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 relative z-50 {{ app()->getLocale() == 'en' ? 'bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 ring-1 ring-blue-200 dark:ring-blue-800' : '' }}">
                             <!-- UK Flag: Simplified Union Jack -->
                             <span
-                                class="flag-icon w-6 h-4 mr-3 relative rounded-sm overflow-hidden border border-gray-200 bg-blue-600">
+                                class="flag-icon w-6 h-4 mr-3 relative rounded-sm overflow-hidden border border-gray-200 dark:border-gray-600 bg-blue-600">
                                 <!-- Blue background -->
                                 <span class="absolute inset-0 bg-blue-600"></span>
                                 <!-- White diagonal crosses -->
@@ -548,7 +726,7 @@
                             </span>
                             <span class="font-medium">English</span>
                             @if (app()->getLocale() == 'en')
-                                <svg class="w-4 h-4 ml-auto text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-4 h-4 ml-auto text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                                         clip-rule="evenodd"></path>
@@ -567,44 +745,194 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-12">
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white py-12 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-3 gap-8">
                 <div>
                     <h3 class="text-lg font-bold mb-4">{{ __('messages.about.title') }}</h3>
-                    <p class="text-gray-300">{{ __('messages.about.description_1') }}</p>
+                    <p class="text-gray-300 dark:text-gray-400">{{ __('messages.about.description_1') }}</p>
                 </div>
                 <div>
                     <h3 class="text-lg font-bold mb-4">{{ __('messages.hero.content_types') }}</h3>
                     <div class="space-y-2">
                         <div class="flex items-center">
                             <span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span>
-                            <span>{{ __('messages.about.visual_content') }} -
+                            <span class="text-gray-300 dark:text-gray-400">{{ __('messages.about.visual_content') }} -
                                 {{ __('messages.about.visual_desc') }}</span>
                         </div>
                         <div class="flex items-center">
                             <span class="w-3 h-3 bg-indigo-500 rounded-full mr-3"></span>
-                            <span>{{ __('messages.about.educational_content') }} -
+                            <span class="text-gray-300 dark:text-gray-400">{{ __('messages.about.educational_content') }} -
                                 {{ __('messages.about.educational_desc') }}</span>
                         </div>
                         <div class="flex items-center">
                             <span class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
-                            <span>{{ __('messages.about.video_content') }} -
+                            <span class="text-gray-300 dark:text-gray-400">{{ __('messages.about.video_content') }} -
                                 {{ __('messages.about.video_desc') }}</span>
                         </div>
                     </div>
                 </div>
                 <div>
                     <h3 class="text-lg font-bold mb-4">{{ __('messages.prompts.collection_title') }}</h3>
-                    <p class="text-gray-300">{{ __('messages.about.description_2') }}</p>
+                    <p class="text-gray-300 dark:text-gray-400">{{ __('messages.about.description_2') }}</p>
                 </div>
             </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+            <div class="border-t border-gray-700 dark:border-gray-600 mt-8 pt-8 text-center">
                 <p>{{ __('messages.footer.copyright') }}</p>
-                <p class="text-gray-400 mt-2">{{ __('messages.footer.tagline') }}</p>
+                <p class="text-gray-400 dark:text-gray-500 mt-2">{{ __('messages.footer.tagline') }}</p>
             </div>
         </div>
-    </footer> <!-- JavaScript for copy functionality and filtering -->
+    </footer> <!-- JavaScript for theme switcher -->
+    <script>
+        // Theme management functions
+        function getThemePreference() {
+            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+                return localStorage.getItem('theme');
+            }
+            return 'system';
+        }
+
+        function setTheme(theme) {
+            localStorage.setItem('theme', theme);
+
+            // Remove all theme classes first
+            document.documentElement.classList.remove('dark');
+
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else if (theme === 'light') {
+                // Already removed dark class above
+            } else if (theme === 'system') {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                }
+            }
+
+            updateThemeIcons();
+        }
+
+        function resetTheme() {
+            localStorage.removeItem('theme');
+            document.documentElement.classList.remove('dark');
+            setTheme('light');
+        }
+
+        // Make functions available globally for debugging
+        window.setTheme = setTheme;
+        window.resetTheme = resetTheme;
+        window.getThemePreference = getThemePreference;
+
+        function updateThemeIcons() {
+            const currentTheme = getThemePreference();
+            const isDark = document.documentElement.classList.contains('dark');
+
+            // Desktop theme icons
+            const lightIcon = document.getElementById('theme-icon-light');
+            const darkIcon = document.getElementById('theme-icon-dark');
+            const systemIcon = document.getElementById('theme-icon-system');
+
+            // Mobile theme icons
+            const mobileLightIcon = document.getElementById('mobile-theme-icon-light');
+            const mobileDarkIcon = document.getElementById('mobile-theme-icon-dark');
+
+            // Hide all icons first
+            [lightIcon, darkIcon, systemIcon].forEach(icon => {
+                if (icon) icon.classList.add('hidden');
+            });
+
+            [mobileLightIcon, mobileDarkIcon].forEach(icon => {
+                if (icon) icon.classList.add('hidden');
+            });
+
+            // Show appropriate icons based on current theme and system state
+            if (currentTheme === 'system') {
+                if (systemIcon) systemIcon.classList.remove('hidden');
+                // For mobile, show the opposite of current state
+                if (isDark) {
+                    if (mobileLightIcon) mobileLightIcon.classList.remove('hidden');
+                } else {
+                    if (mobileDarkIcon) mobileDarkIcon.classList.remove('hidden');
+                }
+            } else if (currentTheme === 'dark') {
+                if (lightIcon) lightIcon.classList.remove('hidden');
+                if (mobileLightIcon) mobileLightIcon.classList.remove('hidden');
+            } else {
+                if (darkIcon) darkIcon.classList.remove('hidden');
+                if (mobileDarkIcon) mobileDarkIcon.classList.remove('hidden');
+            }
+        }
+
+        function toggleMobileTheme() {
+            const currentTheme = getThemePreference();
+            const isDark = document.documentElement.classList.contains('dark');
+
+            if (currentTheme === 'system') {
+                // If system, switch to opposite of current appearance
+                setTheme(isDark ? 'light' : 'dark');
+            } else if (currentTheme === 'dark') {
+                setTheme('light');
+            } else {
+                setTheme('dark');
+            }
+        }
+
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait a bit to ensure DOM is fully loaded
+            setTimeout(function() {
+                const theme = getThemePreference();
+                setTheme(theme);
+                updateThemeIcons();
+            }, 100);
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                const currentTheme = getThemePreference();
+                if (currentTheme === 'system') {
+                    setTheme('system');
+                }
+            });
+
+            // Mobile theme switcher
+            const mobileThemeSwitcher = document.getElementById('mobile-theme-switcher');
+            if (mobileThemeSwitcher) {
+                mobileThemeSwitcher.addEventListener('click', toggleMobileTheme);
+            }
+
+            // Mobile menu functionality
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    const isOpen = mobileMenu.classList.contains('show');
+
+                    if (isOpen) {
+                        mobileMenu.classList.remove('show');
+                        mobileMenuBackdrop.classList.remove('show');
+                        hamburgerIcon.classList.remove('active');
+                    } else {
+                        mobileMenu.classList.add('show');
+                        mobileMenuBackdrop.classList.add('show');
+                        hamburgerIcon.classList.add('active');
+                    }
+                });
+
+                // Close mobile menu when clicking backdrop
+                if (mobileMenuBackdrop) {
+                    mobileMenuBackdrop.addEventListener('click', function() {
+                        mobileMenu.classList.remove('show');
+                        mobileMenuBackdrop.classList.remove('show');
+                        hamburgerIcon.classList.remove('active');
+                    });
+                }
+            }
+        });
+    </script>
+
+    <!-- JavaScript for copy functionality and filtering -->
     <script>
         function copyToClipboard(text) {
             const button = event.target.closest('button');

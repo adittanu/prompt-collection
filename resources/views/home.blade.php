@@ -4,10 +4,10 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="bg-white py-12 sm:py-20">
+    <section class="bg-white dark:bg-gray-900 py-12 sm:py-20 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="hero-title text-4xl sm:text-6xl font-bold text-gray-900 mb-6">{{ __('messages.hero.title') }}</h1>
-            <p class="hero-description text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto mb-8 sm:mb-12">
+            <h1 class="hero-title text-4xl sm:text-6xl font-bold text-gray-900 dark:text-white mb-6">{{ __('messages.hero.title') }}</h1>
+            <p class="hero-description text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto mb-8 sm:mb-12">
                 {{ __('messages.hero.description') }}
             </p>
 
@@ -22,7 +22,7 @@
                     {{ __('messages.hero.explore_collection') }}
                 </a>
                 <a href="#prompts"
-                    class="border border-gray-300 text-gray-700 px-6 sm:px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition flex items-center justify-center">
+                    class="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 sm:px-8 py-3 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition flex items-center justify-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -35,17 +35,17 @@
             <div class="grid grid-cols-3 gap-4 sm:flex sm:justify-center sm:space-x-16 text-center">
                 <div>
                     <div class="text-2xl sm:text-4xl font-bold text-blue-600 mb-2">{{ $stats['total_prompts'] ?? 8 }}+</div>
-                    <div class="text-sm sm:text-base text-gray-600 font-medium">{{ __('messages.hero.total_prompts') }}
+                    <div class="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">{{ __('messages.hero.total_prompts') }}
                     </div>
                 </div>
                 <div>
                     <div class="text-2xl sm:text-4xl font-bold text-green-600 mb-2">{{ $stats['content_types'] ?? 3 }}</div>
-                    <div class="text-sm sm:text-base text-gray-600 font-medium">{{ __('messages.hero.content_types') }}
+                    <div class="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">{{ __('messages.hero.content_types') }}
                     </div>
                 </div>
                 <div>
                     <div class="text-2xl sm:text-4xl font-bold text-purple-600 mb-2">100%</div>
-                    <div class="text-sm sm:text-base text-gray-600 font-medium">{{ __('messages.hero.quality_results') }}
+                    <div class="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">{{ __('messages.hero.quality_results') }}
                     </div>
                 </div>
             </div>
@@ -53,35 +53,35 @@
     </section>
 
     <!-- Prompts Section -->
-    <section id="prompts" class="py-16 bg-gray-50">
+    <section id="prompts" class="py-16 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h3 class="text-4xl font-bold text-gray-900 mb-8">{{ __('messages.prompts.collection_title') }}</h3>
+                <h3 class="text-4xl font-bold text-gray-900 dark:text-white mb-8">{{ __('messages.prompts.collection_title') }}</h3>
 
                 <!-- Search Bar -->
                 <div class="max-w-2xl mx-auto mb-8">
                     <div class="relative">
-                        <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none"
+                        <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                         <input type="text" id="search-input"
                             placeholder="{{ __('messages.prompts.search_placeholder') }}"
-                            class="search-input w-full pl-12 pr-4 py-3 sm:py-4 text-base sm:text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
+                            class="search-input w-full pl-12 pr-4 py-3 sm:py-4 text-base sm:text-lg border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors">
                     </div>
                 </div>
 
                 <!-- Filter Buttons -->
                 <div class="grid grid-cols-2 sm:flex sm:justify-center gap-2 sm:gap-4 mb-8">
                     <button data-filter="all"
-                        class="filter-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base {{ !request()->segment(2) ? 'bg-black text-white' : 'bg-white text-gray-700 border border-gray-300' }} hover:bg-gray-800 hover:text-white transition font-medium">
+                        class="filter-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base {{ !request()->segment(2) ? 'bg-black text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600' }} hover:bg-gray-800 hover:text-white transition font-medium">
                         <span class="hidden sm:inline">{{ __('messages.prompts.all_prompts') }}</span>
                         <span class="sm:hidden">{{ __('messages.prompts.all_prompts') }}</span>
                         <span class="ml-1">({{ $stats['total_prompts'] ?? $prompts->count() }})</span>
                     </button>
                     <button data-filter="image"
-                        class="filter-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base {{ request()->segment(2) == 'image' ? 'bg-black text-white' : 'bg-white text-gray-700 border border-gray-300' }} hover:bg-gray-800 hover:text-white transition flex items-center justify-center font-medium">
+                        class="filter-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base {{ request()->segment(2) == 'image' ? 'bg-black text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600' }} hover:bg-gray-800 hover:text-white transition flex items-center justify-center font-medium">
                         <svg class="w-4 h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
@@ -92,7 +92,7 @@
                         <span class="ml-1">({{ $stats['image_count'] ?? 0 }})</span>
                     </button>
                     <button data-filter="video"
-                        class="filter-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base {{ request()->segment(2) == 'video' ? 'bg-black text-white' : 'bg-white text-gray-700 border border-gray-300' }} hover:bg-gray-800 hover:text-white transition flex items-center justify-center font-medium">
+                        class="filter-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base {{ request()->segment(2) == 'video' ? 'bg-black text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600' }} hover:bg-gray-800 hover:text-white transition flex items-center justify-center font-medium">
                         <svg class="w-4 h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z">
@@ -103,7 +103,7 @@
                         <span class="ml-1">({{ $stats['video_count'] ?? 0 }})</span>
                     </button>
                     <button data-filter="text"
-                        class="filter-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base {{ request()->segment(2) == 'text' ? 'bg-black text-white' : 'bg-white text-gray-700 border border-gray-300' }} hover:bg-gray-800 hover:text-white transition flex items-center justify-center font-medium">
+                        class="filter-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base {{ request()->segment(2) == 'text' ? 'bg-black text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600' }} hover:bg-gray-800 hover:text-white transition flex items-center justify-center font-medium">
                         <svg class="w-4 h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -115,7 +115,7 @@
                     </button>
                 </div>
 
-                <p class="text-gray-600 text-lg" id="showing-text">{{ __('messages.prompts.showing') }}
+                <p class="text-gray-600 dark:text-gray-400 text-lg" id="showing-text">{{ __('messages.prompts.showing') }}
                     {{ $prompts->count() }} {{ __('messages.prompts.of') }}
                     {{ $stats['total_prompts'] ?? $prompts->count() }} {{ __('messages.prompts.prompts') }}</p>
             </div>
@@ -128,7 +128,7 @@
             <!-- Infinite Scroll Status Indicator -->
             <div class="text-center mt-12" id="scroll-status">
                 @if ($prompts->hasMorePages())
-                    <div id="has-more-indicator" class="text-gray-500">
+                    <div id="has-more-indicator" class="text-gray-500 dark:text-gray-400">
                         <svg class="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
@@ -136,7 +136,7 @@
                         <p class="text-sm">{{ __('messages.prompts.scroll_for_more') }}</p>
                     </div>
                 @else
-                    <div id="no-more-indicator" class="text-gray-400">
+                    <div id="no-more-indicator" class="text-gray-400 dark:text-gray-500">
                         <p class="text-sm">{{ __('messages.prompts.no_more_prompts') }}</p>
                     </div>
                 @endif
@@ -153,24 +153,24 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-16 bg-white">
+    <section id="about" class="py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h3 class="text-3xl font-bold text-gray-900 mb-4">{{ __('messages.about.title') }}</h3>
+                <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">{{ __('messages.about.title') }}</h3>
             </div>
 
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <p class="text-lg text-gray-600 mb-6">
+                    <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
                         {{ __('messages.about.description_1') }}
                     </p>
-                    <p class="text-gray-600">
+                    <p class="text-gray-600 dark:text-gray-300">
                         {{ __('messages.about.description_2') }}
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 gap-6">
-                    <div class="text-center p-6 bg-green-50 rounded-xl">
+                    <div class="text-center p-6 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800 transition-colors duration-300">
                         <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -178,11 +178,11 @@
                                 </path>
                             </svg>
                         </div>
-                        <h4 class="font-semibold text-gray-900 mb-2">{{ __('messages.about.visual_content') }}</h4>
-                        <p class="text-sm text-gray-600">{{ __('messages.about.visual_desc') }}</p>
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('messages.about.visual_content') }}</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ __('messages.about.visual_desc') }}</p>
                     </div>
 
-                    <div class="text-center p-6 bg-blue-50 rounded-xl">
+                    <div class="text-center p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800 transition-colors duration-300">
                         <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -190,11 +190,11 @@
                                 </path>
                             </svg>
                         </div>
-                        <h4 class="font-semibold text-gray-900 mb-2">{{ __('messages.about.educational_content') }}</h4>
-                        <p class="text-sm text-gray-600">{{ __('messages.about.educational_desc') }}</p>
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('messages.about.educational_content') }}</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ __('messages.about.educational_desc') }}</p>
                     </div>
 
-                    <div class="text-center p-6 bg-yellow-50 rounded-xl">
+                    <div class="text-center p-6 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800 transition-colors duration-300">
                         <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-3">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -202,8 +202,8 @@
                                 </path>
                             </svg>
                         </div>
-                        <h4 class="font-semibold text-gray-900 mb-2">{{ __('messages.about.video_content') }}</h4>
-                        <p class="text-sm text-gray-600">{{ __('messages.about.video_desc') }}</p>
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ __('messages.about.video_content') }}</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ __('messages.about.video_desc') }}</p>
                     </div>
                 </div>
             </div>
