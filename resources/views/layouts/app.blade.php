@@ -203,13 +203,15 @@
             opacity: 0;
             z-index: 50;
             position: relative;
+            transform: translateY(-10px);
         }
 
         .mobile-menu.show {
-            max-height: 500px;
+            max-height: 600px;
             opacity: 1;
-            transition: max-height 0.3s ease-in, opacity 0.2s ease-in;
+            transition: max-height 0.3s ease-in, opacity 0.2s ease-in, transform 0.3s ease-in;
             overflow: visible;
+            transform: translateY(0);
         }
 
         .mobile-menu-backdrop {
@@ -218,7 +220,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.3);
             z-index: 25;
             opacity: 0;
             pointer-events: none;
@@ -237,6 +239,19 @@
             z-index: 51;
             display: block;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        /* Mobile menu button improvements */
+        #mobile-menu-button {
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        #mobile-menu-button:active {
+            transform: scale(0.95);
         }
 
         /* Hamburger menu animation */
@@ -905,30 +920,84 @@
             const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
             const hamburgerIcon = document.getElementById('hamburger-icon');
 
-            if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', function() {
-                    const isOpen = mobileMenu.classList.contains('show');
-
-                    if (isOpen) {
-                        mobileMenu.classList.remove('show');
-                        mobileMenuBackdrop.classList.remove('show');
-                        hamburgerIcon.classList.remove('active');
-                    } else {
-                        mobileMenu.classList.add('show');
-                        mobileMenuBackdrop.classList.add('show');
-                        hamburgerIcon.classList.add('active');
-                    }
-                });
-
-                // Close mobile menu when clicking backdrop
+            function closeMobileMenu() {
+                if (mobileMenu) {
+                    mobileMenu.classList.remove('show');
+                }
                 if (mobileMenuBackdrop) {
-                    mobileMenuBackdrop.addEventListener('click', function() {
-                        mobileMenu.classList.remove('show');
-                        mobileMenuBackdrop.classList.remove('show');
-                        hamburgerIcon.classList.remove('active');
-                    });
+                    mobileMenuBackdrop.classList.remove('show');
+                }
+                if (hamburgerIcon) {
+                    hamburgerIcon.classList.remove('active');
                 }
             }
+
+            function openMobileMenu() {
+                if (mobileMenu) {
+                    mobileMenu.classList.add('show');
+                }
+                if (mobileMenuBackdrop) {
+                    mobileMenuBackdrop.classList.add('show');
+                }
+                if (hamburgerIcon) {
+                    hamburgerIcon.classList.add('active');
+                }
+            }
+
+            function toggleMobileMenu() {
+                const isOpen = mobileMenu && mobileMenu.classList.contains('show');
+                console.log('Toggle mobile menu - current state:', isOpen ? 'open' : 'closed');
+                
+                if (isOpen) {
+                    closeMobileMenu();
+                } else {
+                    openMobileMenu();
+                }
+            }
+
+            if (mobileMenuButton) {
+                console.log('Mobile menu button found, adding event listener');
+                mobileMenuButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Mobile menu button clicked');
+                    toggleMobileMenu();
+                });
+
+                // Also add touch event for mobile devices
+                mobileMenuButton.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Mobile menu button touched');
+                    toggleMobileMenu();
+                });
+            } else {
+                console.error('Mobile menu button not found');
+            }
+
+            // Close mobile menu when clicking backdrop
+            if (mobileMenuBackdrop) {
+                mobileMenuBackdrop.addEventListener('click', function(e) {
+                    console.log('Backdrop clicked');
+                    closeMobileMenu();
+                });
+            }
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (mobileMenu && mobileMenu.classList.contains('show')) {
+                    if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                        closeMobileMenu();
+                    }
+                }
+            });
+
+            // Close menu when pressing escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileMenu && mobileMenu.classList.contains('show')) {
+                    closeMobileMenu();
+                }
+            });
         });
     </script>
 
